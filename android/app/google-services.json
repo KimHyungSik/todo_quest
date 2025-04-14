@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "670366348356",
+    "project_id": "todoquest-7952e",
+    "storage_bucket": "todoquest-7952e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670366348356:android:bbe6accf8cd2dbbdc4b811",
+        "android_client_info": {
+          "package_name": "kr.sik.todo_quest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPdyObaaoXrStAMJ_NsD-36zE4joF9zaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
