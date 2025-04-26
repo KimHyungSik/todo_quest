@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_quest/repositories/firestore_quest_repository/firestore_quest_repository.dart';
+import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 
 import 'firebase_options.dart';
 import 'models/quest/quest.dart';
@@ -10,6 +12,17 @@ import 'models/quest/quest.dart';
 final testQuestProvider = FutureProvider<List<Quest>>((ref) async {
   final repository = FirestoreRepository();
   return repository.getAllQuests();
+});
+
+// Auth repository provider
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  return AuthRepository();
+});
+
+// Auth state provider
+final authStateProvider = StreamProvider<User?>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.authStateChanges;
 });
 
 void main() async {
@@ -48,33 +61,122 @@ class TestScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // 데이터를 한 번만 가져옵니다
     final questsAsyncValue = ref.watch(testQuestProvider);
+    final authState = ref.watch(authStateProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Firestore 테스트'),
-      ),
-      body: Center(
-        child: questsAsyncValue.when(
-          data: (quests) => quests.isEmpty
-              ? const Text('데이터가 없습니다.')
-              : ListView.builder(
-            itemCount: quests.length,
-            itemBuilder: (context, index) {
-              final quest = quests[index];
-              return ListTile(
-                title: Text(quest.title),
-                subtitle: Text(quest.short_description),
-                trailing: Text('난이도: ${quest.difficulty_label}'),
-                onTap: () {
-                  // 퀘스트 데이터 출력
-                  _showQuestDetails(context, quest);
-                },
-              );
+        actions: [
+          authState.when(
+            data: (user) {
+              return user != null
+                  ? IconButton(
+                      icon: const Icon(Icons.logout),
+                      onPressed: () {
+                        ref.read(authRepositoryProvider).signOut();
+                      },
+                    )
+                  : const SizedBox.shrink();
             },
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
           ),
-          loading: () => const CircularProgressIndicator(),
-          error: (error, stack) => Text('오류 발생: $error'),
-        ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Login Buttons
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Google Sign-In Button
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.login),
+                  label: const Text('Google로 로그인'),
+                  onPressed: () async {
+                    try {
+                      final userCredential = 
+                          await ref.read(authRepositoryProvider).signInWithGoogle();
+                      if (userCredential != null && userCredential.user != null) {
+                        print('로그인 성공: ${userCredential.user!.email}');
+                      }
+                    } catch (e) {
+                      print('로그인 실패: $e');
+                    }
+                  },
+                ),
+                
+                // Apple Sign-In Button (iOS only)
+                if (ref.read(authRepositoryProvider).isIOS)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                      ),
+                      icon: const Icon(Icons.apple),
+                      label: const Text('Apple로 로그인'),
+                      onPressed: () async {
+                        try {
+                          final userCredential = 
+                              await ref.read(authRepositoryProvider).signInWithApple();
+                          if (userCredential != null && userCredential.user != null) {
+                            print('애플 로그인 성공: ${userCredential.user!.email}');
+                          }
+                        } catch (e) {
+                          print('애플 로그인 실패: $e');
+                        }
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          
+          // Display user info if logged in
+          authState.when(
+            data: (user) {
+              return user != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('로그인됨: ${user.email}'),
+                    )
+                  : const SizedBox.shrink();
+            },
+            loading: () => const CircularProgressIndicator(),
+            error: (error, stack) => Text('인증 오류: $error'),
+          ),
+          
+          // Quest list
+          Expanded(
+            child: Center(
+              child: questsAsyncValue.when(
+                data: (quests) => quests.isEmpty
+                    ? const Text('데이터가 없습니다.')
+                    : ListView.builder(
+                  itemCount: quests.length,
+                  itemBuilder: (context, index) {
+                    final quest = quests[index];
+                    return ListTile(
+                      title: Text(quest.title),
+                      subtitle: Text(quest.short_description),
+                      trailing: Text('난이도: ${quest.difficulty_label}'),
+                      onTap: () {
+                        // 퀘스트 데이터 출력
+                        _showQuestDetails(context, quest);
+                      },
+                    );
+                  },
+                ),
+                loading: () => const CircularProgressIndicator(),
+                error: (error, stack) => Text('오류 발생: $error'),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

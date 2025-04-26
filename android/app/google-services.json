@@ -12,7 +12,20 @@
           "package_name": "kr.sik.todo_quest"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "670366348356-njcjsqpl6o30vtj6gm3locnq5dhquoi9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.sik.todo_quest",
+            "certificate_hash": "e146a77c9aacc4e2f507f54e5cb907b41a1826d8"
+          }
+        },
+        {
+          "client_id": "670366348356-2h1ps0rt9np6tvu2phtkq8bas8k1galv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCPdyObaaoXrStAMJ_NsD-36zE4joF9zaE"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670366348356-2h1ps0rt9np6tvu2phtkq8bas8k1galv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "670366348356-47ou0d80p1tff6n9std1skkgrgom1q91.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kr.sik.todoQuest"
+              }
+            }
+          ]
         }
       }
     }
