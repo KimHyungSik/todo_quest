@@ -31,6 +31,17 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Sign in anonymously if no user is already signed in
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  if (auth.currentUser == null) {
+    try {
+      await auth.signInAnonymously();
+      print("Signed in with temporary anonymous account");
+    } catch (e) {
+      print("Anonymous auth error: $e");
+    }
+  }
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -132,6 +143,13 @@ class TestScreen extends ConsumerWidget {
                       },
                     ),
                   ),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.logout),
+                  label: const Text('로그아웃'),
+                  onPressed: () async {
+                    ref.read(authRepositoryProvider).signOut();
+                  },
+                ),
               ],
             ),
           ),
@@ -139,12 +157,20 @@ class TestScreen extends ConsumerWidget {
           // Display user info if logged in
           authState.when(
             data: (user) {
-              return user != null
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('로그인됨: ${user.email}'),
-                    )
-                  : const SizedBox.shrink();
+              print("LOGEE $user");
+              if (user == null) {
+                return const SizedBox.shrink();
+              } else if (user.isAnonymous) {
+                return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('임시 익명 계정으로 로그인됨'),
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('로그인됨: ${user.email}'),
+                );
+              }
             },
             loading: () => const CircularProgressIndicator(),
             error: (error, stack) => Text('인증 오류: $error'),
