@@ -8,10 +8,26 @@ import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 import 'firebase_options.dart';
 import 'models/quest/quest.dart';
 
-// 테스트를 위한 심플 프로바이더 - 한 번만 데이터를 가져옵니다
-final testQuestProvider = FutureProvider<List<Quest>>((ref) async {
+// Firestore Repository provider
+final firestoreRepositoryProvider = Provider<FirestoreRepository>((ref) {
   final repository = FirestoreRepository();
+  ref.onDispose(() {
+    // Clean up resources when the app is closed
+    repository.dispose();
+  });
+  return repository;
+});
+
+// Quests provider (Future-based for single fetch)
+final questsProvider = FutureProvider<List<Quest>>((ref) async {
+  final repository = ref.watch(firestoreRepositoryProvider);
   return repository.getAllQuests();
+});
+
+// Quests Stream provider (for real-time updates)
+final questsStreamProvider = StreamProvider<List<Quest>>((ref) {
+  final repository = ref.watch(firestoreRepositoryProvider);
+  return repository.questsStream;
 });
 
 // Auth repository provider
@@ -70,8 +86,8 @@ class TestScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 데이터를 한 번만 가져옵니다
-    final questsAsyncValue = ref.watch(testQuestProvider);
+    // 실시간으로 퀘스트 데이터를 가져옵니다
+    final questsAsyncValue = ref.watch(questsStreamProvider);
     final authState = ref.watch(authStateProvider);
 
     return Scaffold(
@@ -157,7 +173,6 @@ class TestScreen extends ConsumerWidget {
           // Display user info if logged in
           authState.when(
             data: (user) {
-              print("LOGEE $user");
               if (user == null) {
                 return const SizedBox.shrink();
               } else if (user.isAnonymous) {
@@ -224,7 +239,7 @@ class TestScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             Text('보상: EXP +${quest.rewards['exp']}'),
             const SizedBox(height: 8),
-            Text('태그: ${quest.tags.join(', ')}'),
+            Text('태그: ${quest.categories.map((category) => category.name).join(', ')}'),
           ],
         ),
         actions: [

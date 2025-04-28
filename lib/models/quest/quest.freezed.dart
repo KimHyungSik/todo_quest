@@ -23,8 +23,10 @@ mixin _$Quest implements DiagnosticableTreeMixin {
   int get duration_days;
   Map<String, dynamic> get rewards;
   String get short_description;
-  List<String> get tags;
   String get title;
+  List<QuestCategory> get categories;
+  RewardTitle get rewardTitle;
+  bool get isCompleted;
 
   /// Create a copy of Quest
   /// with the given fields replaced by the non-null parameter values.
@@ -49,8 +51,10 @@ mixin _$Quest implements DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('duration_days', duration_days))
       ..add(DiagnosticsProperty('rewards', rewards))
       ..add(DiagnosticsProperty('short_description', short_description))
-      ..add(DiagnosticsProperty('tags', tags))
-      ..add(DiagnosticsProperty('title', title));
+      ..add(DiagnosticsProperty('title', title))
+      ..add(DiagnosticsProperty('categories', categories))
+      ..add(DiagnosticsProperty('rewardTitle', rewardTitle))
+      ..add(DiagnosticsProperty('isCompleted', isCompleted));
   }
 
   @override
@@ -73,8 +77,13 @@ mixin _$Quest implements DiagnosticableTreeMixin {
             const DeepCollectionEquality().equals(other.rewards, rewards) &&
             (identical(other.short_description, short_description) ||
                 other.short_description == short_description) &&
-            const DeepCollectionEquality().equals(other.tags, tags) &&
-            (identical(other.title, title) || other.title == title));
+            (identical(other.title, title) || other.title == title) &&
+            const DeepCollectionEquality()
+                .equals(other.categories, categories) &&
+            (identical(other.rewardTitle, rewardTitle) ||
+                other.rewardTitle == rewardTitle) &&
+            (identical(other.isCompleted, isCompleted) ||
+                other.isCompleted == isCompleted));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -89,12 +98,14 @@ mixin _$Quest implements DiagnosticableTreeMixin {
       duration_days,
       const DeepCollectionEquality().hash(rewards),
       short_description,
-      const DeepCollectionEquality().hash(tags),
-      title);
+      title,
+      const DeepCollectionEquality().hash(categories),
+      rewardTitle,
+      isCompleted);
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Quest(id: $id, completion_criteria_days: $completion_criteria_days, description: $description, difficulty: $difficulty, difficulty_label: $difficulty_label, duration_days: $duration_days, rewards: $rewards, short_description: $short_description, tags: $tags, title: $title)';
+    return 'Quest(id: $id, completion_criteria_days: $completion_criteria_days, description: $description, difficulty: $difficulty, difficulty_label: $difficulty_label, duration_days: $duration_days, rewards: $rewards, short_description: $short_description, title: $title, categories: $categories, rewardTitle: $rewardTitle, isCompleted: $isCompleted)';
   }
 }
 
@@ -112,8 +123,12 @@ abstract mixin class $QuestCopyWith<$Res> {
       int duration_days,
       Map<String, dynamic> rewards,
       String short_description,
-      List<String> tags,
-      String title});
+      String title,
+      List<QuestCategory> categories,
+      RewardTitle rewardTitle,
+      bool isCompleted});
+
+  $RewardTitleCopyWith<$Res> get rewardTitle;
 }
 
 /// @nodoc
@@ -136,8 +151,10 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
     Object? duration_days = null,
     Object? rewards = null,
     Object? short_description = null,
-    Object? tags = null,
     Object? title = null,
+    Object? categories = null,
+    Object? rewardTitle = null,
+    Object? isCompleted = null,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -172,15 +189,33 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
           ? _self.short_description
           : short_description // ignore: cast_nullable_to_non_nullable
               as String,
-      tags: null == tags
-          ? _self.tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
+      categories: null == categories
+          ? _self.categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<QuestCategory>,
+      rewardTitle: null == rewardTitle
+          ? _self.rewardTitle
+          : rewardTitle // ignore: cast_nullable_to_non_nullable
+              as RewardTitle,
+      isCompleted: null == isCompleted
+          ? _self.isCompleted
+          : isCompleted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
+  }
+
+  /// Create a copy of Quest
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RewardTitleCopyWith<$Res> get rewardTitle {
+    return $RewardTitleCopyWith<$Res>(_self.rewardTitle, (value) {
+      return _then(_self.copyWith(rewardTitle: value));
+    });
   }
 }
 
@@ -189,31 +224,38 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
 class _Quest extends Quest with DiagnosticableTreeMixin {
   const _Quest(
       {required this.id,
-      required this.completion_criteria_days,
-      required this.description,
-      required this.difficulty,
-      required this.difficulty_label,
-      required this.duration_days,
+      this.completion_criteria_days = 1,
+      this.description = '',
+      this.difficulty = 1,
+      this.difficulty_label = '쉬움',
+      this.duration_days = 7,
       required final Map<String, dynamic> rewards,
-      required this.short_description,
-      required final List<String> tags,
-      required this.title})
+      this.short_description = '',
+      required this.title,
+      final List<QuestCategory> categories = const [],
+      required this.rewardTitle,
+      this.isCompleted = false})
       : _rewards = rewards,
-        _tags = tags,
+        _categories = categories,
         super._();
   factory _Quest.fromJson(Map<String, dynamic> json) => _$QuestFromJson(json);
 
   @override
   final String id;
   @override
+  @JsonKey()
   final int completion_criteria_days;
   @override
+  @JsonKey()
   final String description;
   @override
+  @JsonKey()
   final int difficulty;
   @override
+  @JsonKey()
   final String difficulty_label;
   @override
+  @JsonKey()
   final int duration_days;
   final Map<String, dynamic> _rewards;
   @override
@@ -224,17 +266,24 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
   }
 
   @override
+  @JsonKey()
   final String short_description;
-  final List<String> _tags;
   @override
-  List<String> get tags {
-    if (_tags is EqualUnmodifiableListView) return _tags;
+  final String title;
+  final List<QuestCategory> _categories;
+  @override
+  @JsonKey()
+  List<QuestCategory> get categories {
+    if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_tags);
+    return EqualUnmodifiableListView(_categories);
   }
 
   @override
-  final String title;
+  final RewardTitle rewardTitle;
+  @override
+  @JsonKey()
+  final bool isCompleted;
 
   /// Create a copy of Quest
   /// with the given fields replaced by the non-null parameter values.
@@ -264,8 +313,10 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('duration_days', duration_days))
       ..add(DiagnosticsProperty('rewards', rewards))
       ..add(DiagnosticsProperty('short_description', short_description))
-      ..add(DiagnosticsProperty('tags', tags))
-      ..add(DiagnosticsProperty('title', title));
+      ..add(DiagnosticsProperty('title', title))
+      ..add(DiagnosticsProperty('categories', categories))
+      ..add(DiagnosticsProperty('rewardTitle', rewardTitle))
+      ..add(DiagnosticsProperty('isCompleted', isCompleted));
   }
 
   @override
@@ -288,8 +339,13 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
             const DeepCollectionEquality().equals(other._rewards, _rewards) &&
             (identical(other.short_description, short_description) ||
                 other.short_description == short_description) &&
-            const DeepCollectionEquality().equals(other._tags, _tags) &&
-            (identical(other.title, title) || other.title == title));
+            (identical(other.title, title) || other.title == title) &&
+            const DeepCollectionEquality()
+                .equals(other._categories, _categories) &&
+            (identical(other.rewardTitle, rewardTitle) ||
+                other.rewardTitle == rewardTitle) &&
+            (identical(other.isCompleted, isCompleted) ||
+                other.isCompleted == isCompleted));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -304,12 +360,14 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       duration_days,
       const DeepCollectionEquality().hash(_rewards),
       short_description,
-      const DeepCollectionEquality().hash(_tags),
-      title);
+      title,
+      const DeepCollectionEquality().hash(_categories),
+      rewardTitle,
+      isCompleted);
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Quest(id: $id, completion_criteria_days: $completion_criteria_days, description: $description, difficulty: $difficulty, difficulty_label: $difficulty_label, duration_days: $duration_days, rewards: $rewards, short_description: $short_description, tags: $tags, title: $title)';
+    return 'Quest(id: $id, completion_criteria_days: $completion_criteria_days, description: $description, difficulty: $difficulty, difficulty_label: $difficulty_label, duration_days: $duration_days, rewards: $rewards, short_description: $short_description, title: $title, categories: $categories, rewardTitle: $rewardTitle, isCompleted: $isCompleted)';
   }
 }
 
@@ -328,8 +386,13 @@ abstract mixin class _$QuestCopyWith<$Res> implements $QuestCopyWith<$Res> {
       int duration_days,
       Map<String, dynamic> rewards,
       String short_description,
-      List<String> tags,
-      String title});
+      String title,
+      List<QuestCategory> categories,
+      RewardTitle rewardTitle,
+      bool isCompleted});
+
+  @override
+  $RewardTitleCopyWith<$Res> get rewardTitle;
 }
 
 /// @nodoc
@@ -352,8 +415,10 @@ class __$QuestCopyWithImpl<$Res> implements _$QuestCopyWith<$Res> {
     Object? duration_days = null,
     Object? rewards = null,
     Object? short_description = null,
-    Object? tags = null,
     Object? title = null,
+    Object? categories = null,
+    Object? rewardTitle = null,
+    Object? isCompleted = null,
   }) {
     return _then(_Quest(
       id: null == id
@@ -388,15 +453,33 @@ class __$QuestCopyWithImpl<$Res> implements _$QuestCopyWith<$Res> {
           ? _self.short_description
           : short_description // ignore: cast_nullable_to_non_nullable
               as String,
-      tags: null == tags
-          ? _self._tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
+      categories: null == categories
+          ? _self._categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<QuestCategory>,
+      rewardTitle: null == rewardTitle
+          ? _self.rewardTitle
+          : rewardTitle // ignore: cast_nullable_to_non_nullable
+              as RewardTitle,
+      isCompleted: null == isCompleted
+          ? _self.isCompleted
+          : isCompleted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
+  }
+
+  /// Create a copy of Quest
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RewardTitleCopyWith<$Res> get rewardTitle {
+    return $RewardTitleCopyWith<$Res>(_self.rewardTitle, (value) {
+      return _then(_self.copyWith(rewardTitle: value));
+    });
   }
 }
 
