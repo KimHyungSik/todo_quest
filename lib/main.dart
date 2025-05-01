@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo_quest/key/api_key.dart';
 import 'package:todo_quest/repositories/firestore_quest_repository/firestore_quest_repository.dart';
 import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 
@@ -43,21 +45,10 @@ final authStateProvider = StreamProvider<User?>((ref) {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+  await Supabase.initialize(
+    url: supabaseUrl,
+    anonKey: supabaseKey,
   );
-
-  // Sign in anonymously if no user is already signed in
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  if (auth.currentUser == null) {
-    try {
-      await auth.signInAnonymously();
-      print("Signed in with temporary anonymous account");
-    } catch (e) {
-      print("Anonymous auth error: $e");
-    }
-  }
-
   runApp(
     const ProviderScope(
       child: MyApp(),
