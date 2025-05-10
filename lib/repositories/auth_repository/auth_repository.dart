@@ -12,23 +12,19 @@ class AuthRepository {
   final authStateChanges = Supabase.instance.client.auth.onAuthStateChange
       .map((_) => Supabase.instance.client.auth.currentUser);
 
-  Future<AuthResponse> signInAnonymous() async {
-    return await supabase.auth.signInAnonymously();
+  bool isIOS() {
+    return Platform.isIOS;
   }
 
   Future<AuthResponse?> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
-    print('LOGEE Google User: $googleUser');
     if (googleUser == null) {
       return null;
     }
     final googleAuth = await googleUser.authentication;
     final accessToken = googleAuth.accessToken;
     final idToken = googleAuth.idToken;
-    print('LOGEE Google Auth: $googleAuth');
-    print('LOGEE Access Token: $accessToken');
-    print('LOGEE ID Token: $idToken');
     if (accessToken == null) {
       throw 'No Access Token found.';
     }
@@ -36,55 +32,45 @@ class AuthRepository {
       throw 'No ID Token found.';
     }
 
-    return await supabase.auth.signInWithIdToken(
+    var supabaseGoogleAuth = await supabase.auth.signInWithIdToken(
       provider: OAuthProvider.google,
       idToken: idToken,
       accessToken: accessToken,
     );
+
+    return supabaseGoogleAuth;
   }
 
   // Sign in with Apple
-  // Future<UserCredential?> signInWithApple() async {
-  //   try {
-  //     // Perform the sign-in request
-  //     final appleCredential = await SignInWithApple.getAppleIDCredential(
-  //       scopes: [
-  //         AppleIDAuthorizationScopes.email,
-  //         AppleIDAuthorizationScopes.fullName,
-  //       ],
-  //     );
-  //
-  //     // Create an OAuthCredential from the credential returned by Apple
-  //     final oauthCredential = OAuthProvider("apple.com").credential(
-  //       idToken: appleCredential.identityToken,
-  //       accessToken: appleCredential.authorizationCode,
-  //     );
-  //
-  //     // Check if we have an anonymous user that needs to be linked
-  //     if (_auth.currentUser != null && _auth.currentUser!.isAnonymous) {
-  //       // Link the anonymous account with Apple credential
-  //       try {
-  //         return await _auth.currentUser!.linkWithCredential(oauthCredential);
-  //       } on FirebaseAuthException catch (e) {
-  //         if (e.code == 'credential-already-in-use') {
-  //           // If the Apple account already exists, sign in with it directly
-  //           return await _auth.signInWithCredential(oauthCredential);
-  //         } else {
-  //           rethrow;
-  //         }
-  //       }
-  //     } else {
-  //       // Otherwise sign in with Apple credential directly
-  //       return await _auth.signInWithCredential(oauthCredential);
-  //     }
-  //   } catch (e) {
-  //     print('Error signing in with Apple: $e');
-  //     rethrow;
-  //   }
-  // }
+  Future<AuthResponse?> signInWithApple() async {
+      // Perform the sign-in request
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      var idToken = appleCredential.identityToken;
+
+      if(idToken == null){
+        throw 'No ID Token found.';
+      }
+
+      var supabseAppleAuth = await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: idToken,
+        accessToken: appleCredential.authorizationCode
+      );
+
+      return supabseAppleAuth;
+  }
 
   // Sign out
   Future<void> signOut() async {
+    if (_googleSignIn.currentUser != null) {
+      await _googleSignIn.signOut();
+    }
     await supabase.auth.signOut();
   }
 }
