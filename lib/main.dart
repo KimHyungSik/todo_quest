@@ -40,7 +40,6 @@ class TestScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
-    print("LOGEE authState: $authState");
 
     return Scaffold(
       appBar: AppBar(
@@ -69,22 +68,6 @@ class TestScreen extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Anonymous Sign-In Button
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.person),
-                  label: const Text('익명 로그인'),
-                  onPressed: () async {
-                    try {
-                      final userCredential =
-                          await ref.read(authRepositoryProvider).signInAnonymous();
-                      if (userCredential != null && userCredential.user != null) {
-                        print('익명 로그인 성공: ${userCredential.user?.email}');
-                      }
-                    } catch (e) {
-                      print('익명 로그인 실패: $e');
-                    }
-                  },
-                ),
                 // Google Sign-In Button
                 ElevatedButton.icon(
                   icon: const Icon(Icons.login),
@@ -103,29 +86,29 @@ class TestScreen extends ConsumerWidget {
                 ),
                 
                 // Apple Sign-In Button (iOS only)
-                // if (ref.read(authRepositoryProvider).isIOS)
-                //   Padding(
-                //     padding: const EdgeInsets.only(top: 8.0),
-                //     child: ElevatedButton.icon(
-                //       style: ElevatedButton.styleFrom(
-                //         backgroundColor: Colors.black,
-                //         foregroundColor: Colors.white,
-                //       ),
-                //       icon: const Icon(Icons.apple),
-                //       label: const Text('Apple로 로그인'),
-                //       onPressed: () async {
-                //         try {
-                //           final userCredential =
-                //               await ref.read(authRepositoryProvider).signInWithApple();
-                //           if (userCredential != null && userCredential.user != null) {
-                //             print('애플 로그인 성공: ${userCredential.user!.email}');
-                //           }
-                //         } catch (e) {
-                //           print('애플 로그인 실패: $e');
-                //         }
-                //       },
-                //     ),
-                //   ),
+                if (ref.read(authRepositoryProvider).isIOS())
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                      ),
+                      icon: const Icon(Icons.apple),
+                      label: const Text('Apple로 로그인'),
+                      onPressed: () async {
+                        try {
+                          final userCredential =
+                              await ref.read(authRepositoryProvider).signInWithApple();
+                          if (userCredential != null && userCredential.user != null) {
+                            print('애플 로그인 성공: ${userCredential.user!.email}');
+                          }
+                        } catch (e) {
+                          print('애플 로그인 실패: $e');
+                        }
+                      },
+                    ),
+                  ),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.logout),
                   label: const Text('로그아웃'),
