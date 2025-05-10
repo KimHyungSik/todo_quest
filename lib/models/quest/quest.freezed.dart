@@ -32,7 +32,11 @@ mixin _$Quest implements DiagnosticableTreeMixin {
   @JsonKey(name: 'short_description')
   String? get shortDescription;
   @JsonKey(name: 'categories')
-  List<int>? get categoriesId;
+  List<int>? get categoriesId; // Non-serialized fields for the related objects
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  RewardTitle? get rewardTitle;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  List<QuestCategory>? get categoriesList;
 
   /// Create a copy of Quest
   /// with the given fields replaced by the non-null parameter values.
@@ -59,7 +63,9 @@ mixin _$Quest implements DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('durationDays', durationDays))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('shortDescription', shortDescription))
-      ..add(DiagnosticsProperty('categoriesId', categoriesId));
+      ..add(DiagnosticsProperty('categoriesId', categoriesId))
+      ..add(DiagnosticsProperty('rewardTitle', rewardTitle))
+      ..add(DiagnosticsProperty('categoriesList', categoriesList));
   }
 
   @override
@@ -87,7 +93,11 @@ mixin _$Quest implements DiagnosticableTreeMixin {
             (identical(other.shortDescription, shortDescription) ||
                 other.shortDescription == shortDescription) &&
             const DeepCollectionEquality()
-                .equals(other.categoriesId, categoriesId));
+                .equals(other.categoriesId, categoriesId) &&
+            (identical(other.rewardTitle, rewardTitle) ||
+                other.rewardTitle == rewardTitle) &&
+            const DeepCollectionEquality()
+                .equals(other.categoriesList, categoriesList));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -104,11 +114,13 @@ mixin _$Quest implements DiagnosticableTreeMixin {
       durationDays,
       description,
       shortDescription,
-      const DeepCollectionEquality().hash(categoriesId));
+      const DeepCollectionEquality().hash(categoriesId),
+      rewardTitle,
+      const DeepCollectionEquality().hash(categoriesList));
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Quest(id: $id, title: $title, rewardTitleId: $rewardTitleId, rewardsExp: $rewardsExp, difficulty: $difficulty, difficultyLabel: $difficultyLabel, completion_criteria_days: $completion_criteria_days, durationDays: $durationDays, description: $description, shortDescription: $shortDescription, categoriesId: $categoriesId)';
+    return 'Quest(id: $id, title: $title, rewardTitleId: $rewardTitleId, rewardsExp: $rewardsExp, difficulty: $difficulty, difficultyLabel: $difficultyLabel, completion_criteria_days: $completion_criteria_days, durationDays: $durationDays, description: $description, shortDescription: $shortDescription, categoriesId: $categoriesId, rewardTitle: $rewardTitle, categoriesList: $categoriesList)';
   }
 }
 
@@ -128,7 +140,13 @@ abstract mixin class $QuestCopyWith<$Res> {
       @JsonKey(name: 'duration_days') int durationDays,
       String? description,
       @JsonKey(name: 'short_description') String? shortDescription,
-      @JsonKey(name: 'categories') List<int>? categoriesId});
+      @JsonKey(name: 'categories') List<int>? categoriesId,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      RewardTitle? rewardTitle,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      List<QuestCategory>? categoriesList});
+
+  $RewardTitleCopyWith<$Res>? get rewardTitle;
 }
 
 /// @nodoc
@@ -154,6 +172,8 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
     Object? description = freezed,
     Object? shortDescription = freezed,
     Object? categoriesId = freezed,
+    Object? rewardTitle = freezed,
+    Object? categoriesList = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -200,7 +220,29 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
           ? _self.categoriesId
           : categoriesId // ignore: cast_nullable_to_non_nullable
               as List<int>?,
+      rewardTitle: freezed == rewardTitle
+          ? _self.rewardTitle
+          : rewardTitle // ignore: cast_nullable_to_non_nullable
+              as RewardTitle?,
+      categoriesList: freezed == categoriesList
+          ? _self.categoriesList
+          : categoriesList // ignore: cast_nullable_to_non_nullable
+              as List<QuestCategory>?,
     ));
+  }
+
+  /// Create a copy of Quest
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RewardTitleCopyWith<$Res>? get rewardTitle {
+    if (_self.rewardTitle == null) {
+      return null;
+    }
+
+    return $RewardTitleCopyWith<$Res>(_self.rewardTitle!, (value) {
+      return _then(_self.copyWith(rewardTitle: value));
+    });
   }
 }
 
@@ -219,8 +261,12 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       @JsonKey(name: 'duration_days') required this.durationDays,
       this.description,
       @JsonKey(name: 'short_description') this.shortDescription,
-      @JsonKey(name: 'categories') final List<int>? categoriesId})
+      @JsonKey(name: 'categories') final List<int>? categoriesId,
+      @JsonKey(includeFromJson: false, includeToJson: false) this.rewardTitle,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      final List<QuestCategory>? categoriesList})
       : _categoriesId = categoriesId,
+        _categoriesList = categoriesList,
         super._();
   factory _Quest.fromJson(Map<String, dynamic> json) => _$QuestFromJson(json);
 
@@ -261,6 +307,21 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
     return EqualUnmodifiableListView(value);
   }
 
+// Non-serialized fields for the related objects
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final RewardTitle? rewardTitle;
+  final List<QuestCategory>? _categoriesList;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  List<QuestCategory>? get categoriesList {
+    final value = _categoriesList;
+    if (value == null) return null;
+    if (_categoriesList is EqualUnmodifiableListView) return _categoriesList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   /// Create a copy of Quest
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -291,7 +352,9 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('durationDays', durationDays))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('shortDescription', shortDescription))
-      ..add(DiagnosticsProperty('categoriesId', categoriesId));
+      ..add(DiagnosticsProperty('categoriesId', categoriesId))
+      ..add(DiagnosticsProperty('rewardTitle', rewardTitle))
+      ..add(DiagnosticsProperty('categoriesList', categoriesList));
   }
 
   @override
@@ -319,7 +382,11 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
             (identical(other.shortDescription, shortDescription) ||
                 other.shortDescription == shortDescription) &&
             const DeepCollectionEquality()
-                .equals(other._categoriesId, _categoriesId));
+                .equals(other._categoriesId, _categoriesId) &&
+            (identical(other.rewardTitle, rewardTitle) ||
+                other.rewardTitle == rewardTitle) &&
+            const DeepCollectionEquality()
+                .equals(other._categoriesList, _categoriesList));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -336,11 +403,13 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       durationDays,
       description,
       shortDescription,
-      const DeepCollectionEquality().hash(_categoriesId));
+      const DeepCollectionEquality().hash(_categoriesId),
+      rewardTitle,
+      const DeepCollectionEquality().hash(_categoriesList));
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Quest(id: $id, title: $title, rewardTitleId: $rewardTitleId, rewardsExp: $rewardsExp, difficulty: $difficulty, difficultyLabel: $difficultyLabel, completion_criteria_days: $completion_criteria_days, durationDays: $durationDays, description: $description, shortDescription: $shortDescription, categoriesId: $categoriesId)';
+    return 'Quest(id: $id, title: $title, rewardTitleId: $rewardTitleId, rewardsExp: $rewardsExp, difficulty: $difficulty, difficultyLabel: $difficultyLabel, completion_criteria_days: $completion_criteria_days, durationDays: $durationDays, description: $description, shortDescription: $shortDescription, categoriesId: $categoriesId, rewardTitle: $rewardTitle, categoriesList: $categoriesList)';
   }
 }
 
@@ -361,7 +430,14 @@ abstract mixin class _$QuestCopyWith<$Res> implements $QuestCopyWith<$Res> {
       @JsonKey(name: 'duration_days') int durationDays,
       String? description,
       @JsonKey(name: 'short_description') String? shortDescription,
-      @JsonKey(name: 'categories') List<int>? categoriesId});
+      @JsonKey(name: 'categories') List<int>? categoriesId,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      RewardTitle? rewardTitle,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      List<QuestCategory>? categoriesList});
+
+  @override
+  $RewardTitleCopyWith<$Res>? get rewardTitle;
 }
 
 /// @nodoc
@@ -387,6 +463,8 @@ class __$QuestCopyWithImpl<$Res> implements _$QuestCopyWith<$Res> {
     Object? description = freezed,
     Object? shortDescription = freezed,
     Object? categoriesId = freezed,
+    Object? rewardTitle = freezed,
+    Object? categoriesList = freezed,
   }) {
     return _then(_Quest(
       id: null == id
@@ -433,7 +511,29 @@ class __$QuestCopyWithImpl<$Res> implements _$QuestCopyWith<$Res> {
           ? _self._categoriesId
           : categoriesId // ignore: cast_nullable_to_non_nullable
               as List<int>?,
+      rewardTitle: freezed == rewardTitle
+          ? _self.rewardTitle
+          : rewardTitle // ignore: cast_nullable_to_non_nullable
+              as RewardTitle?,
+      categoriesList: freezed == categoriesList
+          ? _self._categoriesList
+          : categoriesList // ignore: cast_nullable_to_non_nullable
+              as List<QuestCategory>?,
     ));
+  }
+
+  /// Create a copy of Quest
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RewardTitleCopyWith<$Res>? get rewardTitle {
+    if (_self.rewardTitle == null) {
+      return null;
+    }
+
+    return $RewardTitleCopyWith<$Res>(_self.rewardTitle!, (value) {
+      return _then(_self.copyWith(rewardTitle: value));
+    });
   }
 }
 

@@ -15,9 +15,9 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$QuestCategory {
-  String get id;
+  int get id;
   String get name;
-  String get description;
+  String? get description;
 
   /// Create a copy of QuestCategory
   /// with the given fields replaced by the non-null parameter values.
@@ -57,7 +57,7 @@ abstract mixin class $QuestCategoryCopyWith<$Res> {
           QuestCategory value, $Res Function(QuestCategory) _then) =
       _$QuestCategoryCopyWithImpl;
   @useResult
-  $Res call({String id, String name, String description});
+  $Res call({int id, String name, String? description});
 }
 
 /// @nodoc
@@ -75,21 +75,21 @@ class _$QuestCategoryCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -97,18 +97,17 @@ class _$QuestCategoryCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _QuestCategory extends QuestCategory {
-  const _QuestCategory(
-      {required this.id, required this.name, required this.description})
+  const _QuestCategory({required this.id, required this.name, this.description})
       : super._();
   factory _QuestCategory.fromJson(Map<String, dynamic> json) =>
       _$QuestCategoryFromJson(json);
 
   @override
-  final String id;
+  final int id;
   @override
   final String name;
   @override
-  final String description;
+  final String? description;
 
   /// Create a copy of QuestCategory
   /// with the given fields replaced by the non-null parameter values.
@@ -154,7 +153,7 @@ abstract mixin class _$QuestCategoryCopyWith<$Res>
       __$QuestCategoryCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, String name, String description});
+  $Res call({int id, String name, String? description});
 }
 
 /// @nodoc
@@ -172,21 +171,21 @@ class __$QuestCategoryCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
   }) {
     return _then(_QuestCategory(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$RewardTitle {
-  String get id;
+  int get id;
   String get name;
   String get description;
 
@@ -56,7 +56,7 @@ abstract mixin class $RewardTitleCopyWith<$Res> {
           RewardTitle value, $Res Function(RewardTitle) _then) =
       _$RewardTitleCopyWithImpl;
   @useResult
-  $Res call({String id, String name, String description});
+  $Res call({int id, String name, String description});
 }
 
 /// @nodoc
@@ -79,7 +79,7 @@ class _$RewardTitleCopyWithImpl<$Res> implements $RewardTitleCopyWith<$Res> {
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -102,7 +102,7 @@ class _RewardTitle extends RewardTitle {
       _$RewardTitleFromJson(json);
 
   @override
-  final String id;
+  final int id;
   @override
   final String name;
   @override
@@ -152,7 +152,7 @@ abstract mixin class _$RewardTitleCopyWith<$Res>
       __$RewardTitleCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, String name, String description});
+  $Res call({int id, String name, String description});
 }
 
 /// @nodoc
@@ -175,7 +175,7 @@ class __$RewardTitleCopyWithImpl<$Res> implements _$RewardTitleCopyWith<$Res> {
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable

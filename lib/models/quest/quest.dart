@@ -27,7 +27,21 @@ abstract class Quest with _$Quest {
     String? description,
     @JsonKey(name: 'short_description') String? shortDescription,
     @JsonKey(name: 'categories') List<int>? categoriesId,
+    // Non-serialized fields for the related objects
+    @JsonKey(includeFromJson: false, includeToJson: false) RewardTitle? rewardTitle,
+    @JsonKey(includeFromJson: false, includeToJson: false) List<QuestCategory>? categoriesList,
   }) = _Quest;
 
   factory Quest.fromJson(Map<String, dynamic> json) => _$QuestFromJson(json);
+
+  // Helper method to create a new Quest with populated title and categories
+  Quest copyWithRelations({
+    RewardTitle? rewardTitle,
+    List<QuestCategory>? categories,
+  }) {
+    return copyWith(
+      rewardTitle: rewardTitle ?? this.rewardTitle,
+      categoriesList: categories ?? this.categoriesList,
+    );
+  }
 }

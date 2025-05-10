@@ -7,7 +7,7 @@ part of 'reward_title.dart';
 // **************************************************************************
 
 _RewardTitle _$RewardTitleFromJson(Map<String, dynamic> json) => _RewardTitle(
-      id: json['id'] as String,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String,
     );

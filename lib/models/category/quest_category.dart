@@ -8,9 +8,9 @@ abstract class QuestCategory with _$QuestCategory {
   const QuestCategory._();
 
   const factory QuestCategory({
-    required String id,
+    required int id,
     required String name,
-    required String description,
+    String? description,
   }) = _QuestCategory;
 
   factory QuestCategory.fromJson(Map<String, dynamic> json) =>
