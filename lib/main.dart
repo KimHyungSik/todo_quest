@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_quest/key/api_key.dart';
 import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
+import 'package:todo_quest/repositories/quest_repository/quest_respository.dart';
 
 import 'models/quest/quest.dart';
 
@@ -114,6 +115,13 @@ class TestScreen extends ConsumerWidget {
                   label: const Text('로그아웃'),
                   onPressed: () async {
                     ref.read(authRepositoryProvider).signOut();
+                  },
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.file_download),
+                  label: const Text('퀘스트 가져오기'),
+                  onPressed: () async {
+                    ref.read(questRepositoryProvider).getQuest();
                   },
                 ),
               ],

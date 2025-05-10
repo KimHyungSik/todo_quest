@@ -7,36 +7,32 @@ part of 'quest.dart';
 // **************************************************************************
 
 _Quest _$QuestFromJson(Map<String, dynamic> json) => _Quest(
-      id: json['id'] as String,
-      completion_criteria_days:
-          (json['completion_criteria_days'] as num?)?.toInt() ?? 1,
-      description: json['description'] as String? ?? '',
-      difficulty: (json['difficulty'] as num?)?.toInt() ?? 1,
-      difficulty_label: json['difficulty_label'] as String? ?? '쉬움',
-      duration_days: (json['duration_days'] as num?)?.toInt() ?? 7,
-      rewards: json['rewards'] as Map<String, dynamic>,
-      short_description: json['short_description'] as String? ?? '',
+      id: (json['id'] as num).toInt(),
       title: json['title'] as String,
-      categories: (json['categories'] as List<dynamic>?)
-              ?.map((e) => QuestCategory.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
-      rewardTitle:
-          RewardTitle.fromJson(json['rewardTitle'] as Map<String, dynamic>),
-      isCompleted: json['isCompleted'] as bool? ?? false,
+      rewardTitleId: (json['rewards_title'] as num).toInt(),
+      rewardsExp: (json['rewards_exp'] as num).toInt(),
+      difficulty: (json['difficulty'] as num).toInt(),
+      difficultyLabel: json['difficulty_label'] as String?,
+      completion_criteria_days:
+          (json['completion_criteria_days'] as num).toInt(),
+      durationDays: (json['duration_days'] as num).toInt(),
+      description: json['description'] as String?,
+      shortDescription: json['short_description'] as String?,
+      categoriesId: (json['categories'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$QuestToJson(_Quest instance) => <String, dynamic>{
       'id': instance.id,
-      'completion_criteria_days': instance.completion_criteria_days,
-      'description': instance.description,
-      'difficulty': instance.difficulty,
-      'difficulty_label': instance.difficulty_label,
-      'duration_days': instance.duration_days,
-      'rewards': instance.rewards,
-      'short_description': instance.short_description,
       'title': instance.title,
-      'categories': instance.categories,
-      'rewardTitle': instance.rewardTitle,
-      'isCompleted': instance.isCompleted,
+      'rewards_title': instance.rewardTitleId,
+      'rewards_exp': instance.rewardsExp,
+      'difficulty': instance.difficulty,
+      'difficulty_label': instance.difficultyLabel,
+      'completion_criteria_days': instance.completion_criteria_days,
+      'duration_days': instance.durationDays,
+      'description': instance.description,
+      'short_description': instance.shortDescription,
+      'categories': instance.categoriesId,
     };
