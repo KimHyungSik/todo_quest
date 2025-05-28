@@ -15,10 +15,10 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Quest implements DiagnosticableTreeMixin {
-  int get id;
+  String get id;
   String get title;
   @JsonKey(name: 'rewards_title')
-  int get rewardTitleId;
+  String get rewardTitleUUid;
   @JsonKey(name: 'rewards_exp')
   int get rewardsExp;
   int get difficulty;
@@ -30,9 +30,7 @@ mixin _$Quest implements DiagnosticableTreeMixin {
   int get durationDays;
   String? get description;
   @JsonKey(name: 'short_description')
-  String? get shortDescription;
-  @JsonKey(name: 'categories')
-  List<int>? get categoriesId; // Non-serialized fields for the related objects
+  String? get shortDescription; // Non-serialized fields for the related objects
   @JsonKey(includeFromJson: false, includeToJson: false)
   RewardTitle? get rewardTitle;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -54,7 +52,7 @@ mixin _$Quest implements DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('type', 'Quest'))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('title', title))
-      ..add(DiagnosticsProperty('rewardTitleId', rewardTitleId))
+      ..add(DiagnosticsProperty('rewardTitleUUid', rewardTitleUUid))
       ..add(DiagnosticsProperty('rewardsExp', rewardsExp))
       ..add(DiagnosticsProperty('difficulty', difficulty))
       ..add(DiagnosticsProperty('difficultyLabel', difficultyLabel))
@@ -63,7 +61,6 @@ mixin _$Quest implements DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('durationDays', durationDays))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('shortDescription', shortDescription))
-      ..add(DiagnosticsProperty('categoriesId', categoriesId))
       ..add(DiagnosticsProperty('rewardTitle', rewardTitle))
       ..add(DiagnosticsProperty('categoriesList', categoriesList));
   }
@@ -75,8 +72,8 @@ mixin _$Quest implements DiagnosticableTreeMixin {
             other is Quest &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.rewardTitleId, rewardTitleId) ||
-                other.rewardTitleId == rewardTitleId) &&
+            (identical(other.rewardTitleUUid, rewardTitleUUid) ||
+                other.rewardTitleUUid == rewardTitleUUid) &&
             (identical(other.rewardsExp, rewardsExp) ||
                 other.rewardsExp == rewardsExp) &&
             (identical(other.difficulty, difficulty) ||
@@ -92,8 +89,6 @@ mixin _$Quest implements DiagnosticableTreeMixin {
                 other.description == description) &&
             (identical(other.shortDescription, shortDescription) ||
                 other.shortDescription == shortDescription) &&
-            const DeepCollectionEquality()
-                .equals(other.categoriesId, categoriesId) &&
             (identical(other.rewardTitle, rewardTitle) ||
                 other.rewardTitle == rewardTitle) &&
             const DeepCollectionEquality()
@@ -106,7 +101,7 @@ mixin _$Quest implements DiagnosticableTreeMixin {
       runtimeType,
       id,
       title,
-      rewardTitleId,
+      rewardTitleUUid,
       rewardsExp,
       difficulty,
       difficultyLabel,
@@ -114,13 +109,12 @@ mixin _$Quest implements DiagnosticableTreeMixin {
       durationDays,
       description,
       shortDescription,
-      const DeepCollectionEquality().hash(categoriesId),
       rewardTitle,
       const DeepCollectionEquality().hash(categoriesList));
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Quest(id: $id, title: $title, rewardTitleId: $rewardTitleId, rewardsExp: $rewardsExp, difficulty: $difficulty, difficultyLabel: $difficultyLabel, completion_criteria_days: $completion_criteria_days, durationDays: $durationDays, description: $description, shortDescription: $shortDescription, categoriesId: $categoriesId, rewardTitle: $rewardTitle, categoriesList: $categoriesList)';
+    return 'Quest(id: $id, title: $title, rewardTitleUUid: $rewardTitleUUid, rewardsExp: $rewardsExp, difficulty: $difficulty, difficultyLabel: $difficultyLabel, completion_criteria_days: $completion_criteria_days, durationDays: $durationDays, description: $description, shortDescription: $shortDescription, rewardTitle: $rewardTitle, categoriesList: $categoriesList)';
   }
 }
 
@@ -130,9 +124,9 @@ abstract mixin class $QuestCopyWith<$Res> {
       _$QuestCopyWithImpl;
   @useResult
   $Res call(
-      {int id,
+      {String id,
       String title,
-      @JsonKey(name: 'rewards_title') int rewardTitleId,
+      @JsonKey(name: 'rewards_title') String rewardTitleUUid,
       @JsonKey(name: 'rewards_exp') int rewardsExp,
       int difficulty,
       @JsonKey(name: 'difficulty_label') String? difficultyLabel,
@@ -140,7 +134,6 @@ abstract mixin class $QuestCopyWith<$Res> {
       @JsonKey(name: 'duration_days') int durationDays,
       String? description,
       @JsonKey(name: 'short_description') String? shortDescription,
-      @JsonKey(name: 'categories') List<int>? categoriesId,
       @JsonKey(includeFromJson: false, includeToJson: false)
       RewardTitle? rewardTitle,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -163,7 +156,7 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? rewardTitleId = null,
+    Object? rewardTitleUUid = null,
     Object? rewardsExp = null,
     Object? difficulty = null,
     Object? difficultyLabel = freezed,
@@ -171,7 +164,6 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
     Object? durationDays = null,
     Object? description = freezed,
     Object? shortDescription = freezed,
-    Object? categoriesId = freezed,
     Object? rewardTitle = freezed,
     Object? categoriesList = freezed,
   }) {
@@ -179,15 +171,15 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      rewardTitleId: null == rewardTitleId
-          ? _self.rewardTitleId
-          : rewardTitleId // ignore: cast_nullable_to_non_nullable
-              as int,
+      rewardTitleUUid: null == rewardTitleUUid
+          ? _self.rewardTitleUUid
+          : rewardTitleUUid // ignore: cast_nullable_to_non_nullable
+              as String,
       rewardsExp: null == rewardsExp
           ? _self.rewardsExp
           : rewardsExp // ignore: cast_nullable_to_non_nullable
@@ -216,10 +208,6 @@ class _$QuestCopyWithImpl<$Res> implements $QuestCopyWith<$Res> {
           ? _self.shortDescription
           : shortDescription // ignore: cast_nullable_to_non_nullable
               as String?,
-      categoriesId: freezed == categoriesId
-          ? _self.categoriesId
-          : categoriesId // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
       rewardTitle: freezed == rewardTitle
           ? _self.rewardTitle
           : rewardTitle // ignore: cast_nullable_to_non_nullable
@@ -252,7 +240,7 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
   _Quest(
       {required this.id,
       required this.title,
-      @JsonKey(name: 'rewards_title') required this.rewardTitleId,
+      @JsonKey(name: 'rewards_title') required this.rewardTitleUUid,
       @JsonKey(name: 'rewards_exp') required this.rewardsExp,
       required this.difficulty,
       @JsonKey(name: 'difficulty_label') required this.difficultyLabel,
@@ -261,22 +249,20 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       @JsonKey(name: 'duration_days') required this.durationDays,
       this.description,
       @JsonKey(name: 'short_description') this.shortDescription,
-      @JsonKey(name: 'categories') final List<int>? categoriesId,
       @JsonKey(includeFromJson: false, includeToJson: false) this.rewardTitle,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final List<QuestCategory>? categoriesList})
-      : _categoriesId = categoriesId,
-        _categoriesList = categoriesList,
+      : _categoriesList = categoriesList,
         super._();
   factory _Quest.fromJson(Map<String, dynamic> json) => _$QuestFromJson(json);
 
   @override
-  final int id;
+  final String id;
   @override
   final String title;
   @override
   @JsonKey(name: 'rewards_title')
-  final int rewardTitleId;
+  final String rewardTitleUUid;
   @override
   @JsonKey(name: 'rewards_exp')
   final int rewardsExp;
@@ -296,17 +282,6 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
   @override
   @JsonKey(name: 'short_description')
   final String? shortDescription;
-  final List<int>? _categoriesId;
-  @override
-  @JsonKey(name: 'categories')
-  List<int>? get categoriesId {
-    final value = _categoriesId;
-    if (value == null) return null;
-    if (_categoriesId is EqualUnmodifiableListView) return _categoriesId;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
 // Non-serialized fields for the related objects
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -343,7 +318,7 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('type', 'Quest'))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('title', title))
-      ..add(DiagnosticsProperty('rewardTitleId', rewardTitleId))
+      ..add(DiagnosticsProperty('rewardTitleUUid', rewardTitleUUid))
       ..add(DiagnosticsProperty('rewardsExp', rewardsExp))
       ..add(DiagnosticsProperty('difficulty', difficulty))
       ..add(DiagnosticsProperty('difficultyLabel', difficultyLabel))
@@ -352,7 +327,6 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('durationDays', durationDays))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('shortDescription', shortDescription))
-      ..add(DiagnosticsProperty('categoriesId', categoriesId))
       ..add(DiagnosticsProperty('rewardTitle', rewardTitle))
       ..add(DiagnosticsProperty('categoriesList', categoriesList));
   }
@@ -364,8 +338,8 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
             other is _Quest &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.rewardTitleId, rewardTitleId) ||
-                other.rewardTitleId == rewardTitleId) &&
+            (identical(other.rewardTitleUUid, rewardTitleUUid) ||
+                other.rewardTitleUUid == rewardTitleUUid) &&
             (identical(other.rewardsExp, rewardsExp) ||
                 other.rewardsExp == rewardsExp) &&
             (identical(other.difficulty, difficulty) ||
@@ -381,8 +355,6 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
                 other.description == description) &&
             (identical(other.shortDescription, shortDescription) ||
                 other.shortDescription == shortDescription) &&
-            const DeepCollectionEquality()
-                .equals(other._categoriesId, _categoriesId) &&
             (identical(other.rewardTitle, rewardTitle) ||
                 other.rewardTitle == rewardTitle) &&
             const DeepCollectionEquality()
@@ -395,7 +367,7 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       runtimeType,
       id,
       title,
-      rewardTitleId,
+      rewardTitleUUid,
       rewardsExp,
       difficulty,
       difficultyLabel,
@@ -403,13 +375,12 @@ class _Quest extends Quest with DiagnosticableTreeMixin {
       durationDays,
       description,
       shortDescription,
-      const DeepCollectionEquality().hash(_categoriesId),
       rewardTitle,
       const DeepCollectionEquality().hash(_categoriesList));
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Quest(id: $id, title: $title, rewardTitleId: $rewardTitleId, rewardsExp: $rewardsExp, difficulty: $difficulty, difficultyLabel: $difficultyLabel, completion_criteria_days: $completion_criteria_days, durationDays: $durationDays, description: $description, shortDescription: $shortDescription, categoriesId: $categoriesId, rewardTitle: $rewardTitle, categoriesList: $categoriesList)';
+    return 'Quest(id: $id, title: $title, rewardTitleUUid: $rewardTitleUUid, rewardsExp: $rewardsExp, difficulty: $difficulty, difficultyLabel: $difficultyLabel, completion_criteria_days: $completion_criteria_days, durationDays: $durationDays, description: $description, shortDescription: $shortDescription, rewardTitle: $rewardTitle, categoriesList: $categoriesList)';
   }
 }
 
@@ -420,9 +391,9 @@ abstract mixin class _$QuestCopyWith<$Res> implements $QuestCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int id,
+      {String id,
       String title,
-      @JsonKey(name: 'rewards_title') int rewardTitleId,
+      @JsonKey(name: 'rewards_title') String rewardTitleUUid,
       @JsonKey(name: 'rewards_exp') int rewardsExp,
       int difficulty,
       @JsonKey(name: 'difficulty_label') String? difficultyLabel,
@@ -430,7 +401,6 @@ abstract mixin class _$QuestCopyWith<$Res> implements $QuestCopyWith<$Res> {
       @JsonKey(name: 'duration_days') int durationDays,
       String? description,
       @JsonKey(name: 'short_description') String? shortDescription,
-      @JsonKey(name: 'categories') List<int>? categoriesId,
       @JsonKey(includeFromJson: false, includeToJson: false)
       RewardTitle? rewardTitle,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -454,7 +424,7 @@ class __$QuestCopyWithImpl<$Res> implements _$QuestCopyWith<$Res> {
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? rewardTitleId = null,
+    Object? rewardTitleUUid = null,
     Object? rewardsExp = null,
     Object? difficulty = null,
     Object? difficultyLabel = freezed,
@@ -462,7 +432,6 @@ class __$QuestCopyWithImpl<$Res> implements _$QuestCopyWith<$Res> {
     Object? durationDays = null,
     Object? description = freezed,
     Object? shortDescription = freezed,
-    Object? categoriesId = freezed,
     Object? rewardTitle = freezed,
     Object? categoriesList = freezed,
   }) {
@@ -470,15 +439,15 @@ class __$QuestCopyWithImpl<$Res> implements _$QuestCopyWith<$Res> {
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      rewardTitleId: null == rewardTitleId
-          ? _self.rewardTitleId
-          : rewardTitleId // ignore: cast_nullable_to_non_nullable
-              as int,
+      rewardTitleUUid: null == rewardTitleUUid
+          ? _self.rewardTitleUUid
+          : rewardTitleUUid // ignore: cast_nullable_to_non_nullable
+              as String,
       rewardsExp: null == rewardsExp
           ? _self.rewardsExp
           : rewardsExp // ignore: cast_nullable_to_non_nullable
@@ -507,10 +476,6 @@ class __$QuestCopyWithImpl<$Res> implements _$QuestCopyWith<$Res> {
           ? _self.shortDescription
           : shortDescription // ignore: cast_nullable_to_non_nullable
               as String?,
-      categoriesId: freezed == categoriesId
-          ? _self._categoriesId
-          : categoriesId // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
       rewardTitle: freezed == rewardTitle
           ? _self.rewardTitle
           : rewardTitle // ignore: cast_nullable_to_non_nullable

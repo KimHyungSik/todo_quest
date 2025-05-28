@@ -1,19 +1,55 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:todo_quest/models/category/quest_category.dart';
 import 'package:todo_quest/models/quest/quest.dart';
-import 'package:todo_quest/models/title/reward_title.dart';
 import 'package:todo_quest/repositories/quest_repository/quest_constants.dart';
+
+import '../../models/quest/category/quest_category.dart';
+import '../../models/quest/title/reward_title.dart';
 
 class QuestRepository {
   final supabase = Supabase.instance.client;
 
-  // Supabase에서 퀘스트 가져오기
-  Future<List<Quest>> getQuests() async {
-    final response = await supabase.rpc(QuestConstants.newQuestFunction);
-    final List<Quest> quests =
-        response.map<Quest>((res) => Quest.fromJson(res)).toList();
-    return quests;
+  /// 퀘스트 추천을 가져오는 함수
+  ///
+  /// [categoryId] - 특정 카테고리의 퀘스트만 가져오려면 카테고리 ID를 제공
+  /// [difficulty] - 특정 난이도의 퀘스트만 가져오려면 난이도(1~5)를 제공
+  /// [searchText] - 제목이나 설명에서 특정 텍스트를 검색하려면 검색어를 제공
+  /// [random] - 결과를 랜덤으로 정렬할지 여부
+  /// [limit] - 가져올 최대 퀘스트 수
+  Future<List<Quest>> getQuestRecommendations({
+    String? categoryId,
+    int? difficulty,
+    String? searchText,
+    bool random = true,
+    int limit = 3,
+  }) async {
+    try {
+      final response = await supabase.rpc(
+        QuestConstants.getQuests,
+        params: {
+          'p_category_id': categoryId,
+          'p_difficulty': difficulty,
+          'p_search_text': searchText,
+          'p_random': random,
+          'p_limit': limit,
+        },
+      );
+
+      if (response == null) {
+        return [];
+      }
+
+      // JSON 배열을 Quest 객체 리스트로 변환
+      final List<Quest> quests = (response as List)
+          .map((data) => Quest.fromJson(data))
+          .toList();
+
+      quests.forEach((quest) => print("LOGEE $quest"));
+      return quests;
+    } catch (e) {
+      print('퀘스트 추천을 가져오는 중 오류 발생: $e');
+      return [];
+    }
   }
 
   // ID로 특정 보상 타이틀 가져오기
@@ -54,53 +90,12 @@ class QuestRepository {
 
   // 타이틀과 카테고리 데이터가 포함된 퀘스트 가져오기
   Future<List<Quest>> getQuestsWithRelations() async {
-    // 1. 기본 퀘스트 가져오기
-    final List<Quest> quests = await getQuests();
+    final List<Quest> quests = await getQuestRecommendations();
 
-    // 2. 필요한 모든 타이틀 ID와 카테고리 ID 수집
-    final Set<int> titleIds = quests.map((q) => q.rewardTitleId).toSet();
-    final Set<int> categoryIds = {};
-    for (var quest in quests) {
-      if (quest.categoriesId != null) {
-        categoryIds.addAll(quest.categoriesId!);
-      }
-    }
 
-    // 3. 네트워크 요청을 최소화하기 위해 모든 타이틀과 카테고리를 한 번에 가져오기
-    final List<RewardTitle> rewardTitles =
-        await getRewardTitles(titleIds.toList());
-    final Map<int, RewardTitle> titleMap = {
-      for (var title in rewardTitles) title.id: title
-    };
 
-    final List<QuestCategory> categories =
-        await getCategories(categoryIds.toList());
-    final Map<int, QuestCategory> categoryMap = {
-      for (var category in categories) category.id: category
-    };
 
-    // 4. 각 퀘스트에 타이틀과 카테고리 정보 채우기
-    final List<Quest> populatedQuests = quests.map((quest) {
-      // 이 퀘스트의 보상 타이틀 가져오기
-      final rewardTitle = titleMap[quest.rewardTitleId];
-
-      // 이 퀘스트의 카테고리 가져오기
-      List<QuestCategory>? questCategories;
-      if (quest.categoriesId != null && quest.categoriesId!.isNotEmpty) {
-        questCategories = quest.categoriesId!
-            .map((id) => categoryMap[id.toString()])
-            .whereType<QuestCategory>()
-            .toList();
-      }
-
-      // 정보가 채워진 새 퀘스트 반환
-      return quest.copyWithRelations(
-        rewardTitle: rewardTitle,
-        categories: questCategories,
-      );
-    }).toList();
-
-    return populatedQuests;
+    return quests;
   }
 }
 

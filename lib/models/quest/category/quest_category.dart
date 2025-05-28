@@ -8,7 +8,7 @@ abstract class QuestCategory with _$QuestCategory {
   const QuestCategory._();
 
   const factory QuestCategory({
-    required int id,
+    required String id,
     required String name,
     String? description,
   }) = _QuestCategory;

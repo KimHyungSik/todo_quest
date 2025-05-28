@@ -5,7 +5,7 @@ class QuestConstants {
   static const String categoriesTable = 'categories';
 
   // RPC 함수 이름
-  static const String newQuestFunction = 'new_quest';
+  static const String getQuests = 'get_quest_recommendations';
 
   // 필드 이름
   static const String idField = 'id';

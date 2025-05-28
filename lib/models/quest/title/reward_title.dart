@@ -8,7 +8,7 @@ abstract class RewardTitle with _$RewardTitle {
   const RewardTitle._();
 
   const factory RewardTitle({
-    required int id,
+    required String id,
     required String name,
     required String description,
   }) = _RewardTitle;

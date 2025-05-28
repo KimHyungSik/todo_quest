@@ -2,12 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../category/quest_category.dart';
-import '../title/reward_title.dart';
+import 'package:todo_quest/models/quest/title/reward_title.dart';
+import 'category/quest_category.dart';
 
 part 'quest.freezed.dart';
-
 part 'quest.g.dart';
 
 @freezed
@@ -15,9 +13,9 @@ abstract class Quest with _$Quest {
   const Quest._();
 
   factory Quest({
-    required int id,
+    required String id,
     required String title,
-    @JsonKey(name: 'rewards_title') required int rewardTitleId,
+    @JsonKey(name: 'rewards_title') required String rewardTitleUUid,
     @JsonKey(name: 'rewards_exp') required int rewardsExp,
     required int difficulty,
     @JsonKey(name: 'difficulty_label') required String? difficultyLabel,
@@ -26,7 +24,6 @@ abstract class Quest with _$Quest {
     @JsonKey(name: 'duration_days') required int durationDays,
     String? description,
     @JsonKey(name: 'short_description') String? shortDescription,
-    @JsonKey(name: 'categories') List<int>? categoriesId,
     // Non-serialized fields for the related objects
     @JsonKey(includeFromJson: false, includeToJson: false) RewardTitle? rewardTitle,
     @JsonKey(includeFromJson: false, includeToJson: false) List<QuestCategory>? categoriesList,

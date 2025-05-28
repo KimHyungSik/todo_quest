@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'reward_title.dart';
+part of 'quest_category.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,26 +14,27 @@ part of 'reward_title.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$RewardTitle {
-  int get id;
+mixin _$QuestCategory {
+  String get id;
   String get name;
-  String get description;
+  String? get description;
 
-  /// Create a copy of RewardTitle
+  /// Create a copy of QuestCategory
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $RewardTitleCopyWith<RewardTitle> get copyWith =>
-      _$RewardTitleCopyWithImpl<RewardTitle>(this as RewardTitle, _$identity);
+  $QuestCategoryCopyWith<QuestCategory> get copyWith =>
+      _$QuestCategoryCopyWithImpl<QuestCategory>(
+          this as QuestCategory, _$identity);
 
-  /// Serializes this RewardTitle to a JSON map.
+  /// Serializes this QuestCategory to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is RewardTitle &&
+            other is QuestCategory &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
@@ -46,79 +47,79 @@ mixin _$RewardTitle {
 
   @override
   String toString() {
-    return 'RewardTitle(id: $id, name: $name, description: $description)';
+    return 'QuestCategory(id: $id, name: $name, description: $description)';
   }
 }
 
 /// @nodoc
-abstract mixin class $RewardTitleCopyWith<$Res> {
-  factory $RewardTitleCopyWith(
-          RewardTitle value, $Res Function(RewardTitle) _then) =
-      _$RewardTitleCopyWithImpl;
+abstract mixin class $QuestCategoryCopyWith<$Res> {
+  factory $QuestCategoryCopyWith(
+          QuestCategory value, $Res Function(QuestCategory) _then) =
+      _$QuestCategoryCopyWithImpl;
   @useResult
-  $Res call({int id, String name, String description});
+  $Res call({String id, String name, String? description});
 }
 
 /// @nodoc
-class _$RewardTitleCopyWithImpl<$Res> implements $RewardTitleCopyWith<$Res> {
-  _$RewardTitleCopyWithImpl(this._self, this._then);
+class _$QuestCategoryCopyWithImpl<$Res>
+    implements $QuestCategoryCopyWith<$Res> {
+  _$QuestCategoryCopyWithImpl(this._self, this._then);
 
-  final RewardTitle _self;
-  final $Res Function(RewardTitle) _then;
+  final QuestCategory _self;
+  final $Res Function(QuestCategory) _then;
 
-  /// Create a copy of RewardTitle
+  /// Create a copy of QuestCategory
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _RewardTitle extends RewardTitle {
-  const _RewardTitle(
-      {required this.id, required this.name, required this.description})
+class _QuestCategory extends QuestCategory {
+  const _QuestCategory({required this.id, required this.name, this.description})
       : super._();
-  factory _RewardTitle.fromJson(Map<String, dynamic> json) =>
-      _$RewardTitleFromJson(json);
+  factory _QuestCategory.fromJson(Map<String, dynamic> json) =>
+      _$QuestCategoryFromJson(json);
 
   @override
-  final int id;
+  final String id;
   @override
   final String name;
   @override
-  final String description;
+  final String? description;
 
-  /// Create a copy of RewardTitle
+  /// Create a copy of QuestCategory
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$RewardTitleCopyWith<_RewardTitle> get copyWith =>
-      __$RewardTitleCopyWithImpl<_RewardTitle>(this, _$identity);
+  _$QuestCategoryCopyWith<_QuestCategory> get copyWith =>
+      __$QuestCategoryCopyWithImpl<_QuestCategory>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$RewardTitleToJson(
+    return _$QuestCategoryToJson(
       this,
     );
   }
@@ -127,7 +128,7 @@ class _RewardTitle extends RewardTitle {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _RewardTitle &&
+            other is _QuestCategory &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
@@ -140,50 +141,51 @@ class _RewardTitle extends RewardTitle {
 
   @override
   String toString() {
-    return 'RewardTitle(id: $id, name: $name, description: $description)';
+    return 'QuestCategory(id: $id, name: $name, description: $description)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$RewardTitleCopyWith<$Res>
-    implements $RewardTitleCopyWith<$Res> {
-  factory _$RewardTitleCopyWith(
-          _RewardTitle value, $Res Function(_RewardTitle) _then) =
-      __$RewardTitleCopyWithImpl;
+abstract mixin class _$QuestCategoryCopyWith<$Res>
+    implements $QuestCategoryCopyWith<$Res> {
+  factory _$QuestCategoryCopyWith(
+          _QuestCategory value, $Res Function(_QuestCategory) _then) =
+      __$QuestCategoryCopyWithImpl;
   @override
   @useResult
-  $Res call({int id, String name, String description});
+  $Res call({String id, String name, String? description});
 }
 
 /// @nodoc
-class __$RewardTitleCopyWithImpl<$Res> implements _$RewardTitleCopyWith<$Res> {
-  __$RewardTitleCopyWithImpl(this._self, this._then);
+class __$QuestCategoryCopyWithImpl<$Res>
+    implements _$QuestCategoryCopyWith<$Res> {
+  __$QuestCategoryCopyWithImpl(this._self, this._then);
 
-  final _RewardTitle _self;
-  final $Res Function(_RewardTitle) _then;
+  final _QuestCategory _self;
+  final $Res Function(_QuestCategory) _then;
 
-  /// Create a copy of RewardTitle
+  /// Create a copy of QuestCategory
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
   }) {
-    return _then(_RewardTitle(
+    return _then(_QuestCategory(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
