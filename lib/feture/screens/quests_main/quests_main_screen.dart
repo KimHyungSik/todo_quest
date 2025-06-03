@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_quest/feture/screens/quests_main/quests_main_viewmodel.dart';
+import 'package:todo_quest/feture/screens/quests_main/widget/recommended_quest_card.dart';
+import 'package:todo_quest/models/quest/quest.dart';
 import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 import 'package:todo_quest/repositories/quest_repository/quest_respository.dart';
 import 'package:todo_quest/screens/login_screen.dart';
@@ -10,7 +13,7 @@ class QuestsMainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
-    final questsState = ref.watch(questsWithRelationsProvider);
+    final questsMainState = ref.watch(questsMainViewModelProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -111,80 +114,11 @@ class QuestsMainScreen extends ConsumerWidget {
 
                   // Show quests with populated categories and titles
                   Expanded(
-                    child: questsState.when(
-                      data: (quests) {
-                        if (quests.isEmpty) {
-                          return const Center(
-                            child: Text('퀘스트가 없습니다'),
-                          );
-                        }
-
-                        return ListView.builder(
-                          itemCount: quests.length,
-                          itemBuilder: (context, index) {
-                            final quest = quests[index];
-                            return Card(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Quest title
-                                    Text(
-                                      quest.title,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-
-                                    // Quest description
-                                    if (quest.description != null)
-                                      Text(quest.description!),
-                                    const SizedBox(height: 8),
-
-                                    // Display reward title if available
-                                    if (quest.rewardTitle != null)
-                                      Text(
-                                        '보상: ${quest.rewardTitle!.name}',
-                                        style: TextStyle(
-                                          color: Colors.green.shade700,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-
-                                    // Show quest categories if available
-                                    if (quest.categoriesList != null && quest.categoriesList!.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8.0),
-                                        child: Wrap(
-                                          spacing: 8,
-                                          children: quest.categoriesList!.map((category) {
-                                            return Chip(
-                                              label: Text(category.name),
-                                              backgroundColor: Colors.blue.shade100,
-                                              labelStyle: const TextStyle(fontSize: 12),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      error: (error, stack) {
-                        print("퀘스트 로딩 오류: $error");
-                        return Center(
-                          child: Text('퀘스트 로딩 오류: $error'),
-                        );
+                    child: ListView.builder(
+                      itemCount: questsMainState.recommendedQuests.length,
+                      itemBuilder: (context, index) {
+                        final quest = questsMainState.recommendedQuests[index];
+                        return recommendedQuestCard(quest);
                       },
                     ),
                   ),
