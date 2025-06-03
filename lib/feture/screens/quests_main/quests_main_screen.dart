@@ -4,8 +4,8 @@ import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 import 'package:todo_quest/repositories/quest_repository/quest_respository.dart';
 import 'package:todo_quest/screens/login_screen.dart';
 
-class QuestListScreen extends ConsumerWidget {
-  const QuestListScreen({Key? key}) : super(key: key);
+class QuestsMainScreen extends ConsumerWidget {
+  const QuestsMainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

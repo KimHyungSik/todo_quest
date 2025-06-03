@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_quest/key/api_key.dart';
 import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 import 'package:todo_quest/screens/login_screen.dart';
-import 'package:todo_quest/screens/quest_list_screen.dart';
+import 'package:todo_quest/feture/screens/quests_main/quests_main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +34,7 @@ class MyApp extends ConsumerWidget {
       home: authState.when(
         data: (user) {
           // If user is logged in, show quest list screen, otherwise show login screen
-          return user != null ? const QuestListScreen() : const LoginScreen();
+          return user != null ? const QuestsMainScreen() : const LoginScreen();
         },
         loading: () => const Scaffold(
           body: Center(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
-import 'package:todo_quest/screens/quest_list_screen.dart';
+import 'package:todo_quest/feture/screens/quests_main/quests_main_screen.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -40,13 +40,11 @@ class LoginScreen extends ConsumerWidget {
                 try {
                   final userCredential = await ref.read(authRepositoryProvider).signInWithGoogle();
                   if (userCredential != null && userCredential.user != null) {
-                    print('로그인 성공: ${userCredential.user!.email}');
-                    
                     // Navigate to quest list screen after successful login
                     if (context.mounted) {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => const QuestListScreen(),
+                          builder: (context) => const QuestsMainScreen(),
                         ),
                       );
                     }
@@ -78,7 +76,7 @@ class LoginScreen extends ConsumerWidget {
                         if (context.mounted) {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => const QuestListScreen(),
+                              builder: (context) => const QuestsMainScreen(),
                             ),
                           );
                         }
@@ -109,7 +107,7 @@ class LoginScreen extends ConsumerWidget {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => const QuestListScreen(),
+                        builder: (context) => const QuestsMainScreen(),
                       ),
                     );
                   });
