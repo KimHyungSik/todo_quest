@@ -44,7 +44,6 @@ class QuestRepository {
           .map((data) => Quest.fromJson(data))
           .toList();
 
-      quests.forEach((quest) => print("LOGEE $quest"));
       return quests;
     } catch (e) {
       print('퀘스트 추천을 가져오는 중 오류 발생: $e');

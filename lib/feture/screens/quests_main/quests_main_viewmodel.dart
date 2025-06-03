@@ -2,12 +2,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_quest/feture/screens/quests_main/state/quests_main_state.dart';
 
+import '../../../models/quest/quest.dart';
 import '../../../repositories/auth_repository/auth_repository.dart';
 import '../../../repositories/quest_repository/quest_respository.dart';
 
 class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
-  QuestsMainViewModel()
-      : super(QuestsMainState()) {
+  QuestsMainViewModel() : super(QuestsMainState()) {
     _initialize();
   }
 
@@ -15,11 +15,18 @@ class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
 
   // 초기화
   Future<void> _initialize() async {
+    state = state.copyWith(isLoading: true);
     final recommendedQuests = await _questRepository.getQuestRecommendations();
-    state = state.copyWith(recommendedQuests: recommendedQuests);
+    state =
+        state.copyWith(recommendedQuests: recommendedQuests, isLoading: false);
+  }
+
+  void onClickRecommendedQuest(Quest quest) {
+    print("LOGEE $quest");
   }
 }
 
-final questsMainViewModelProvider = StateNotifierProvider<QuestsMainViewModel, QuestsMainState>((ref) {
+final questsMainViewModelProvider =
+    StateNotifierProvider<QuestsMainViewModel, QuestsMainState>((ref) {
   return QuestsMainViewModel();
 });

@@ -15,6 +15,8 @@ class QuestsMainScreen extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
     final questsMainState = ref.watch(questsMainViewModelProvider);
 
+    final viewModel = ref.read(questsMainViewModelProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todo Quest - 퀘스트 목록'),
@@ -118,7 +120,10 @@ class QuestsMainScreen extends ConsumerWidget {
                       itemCount: questsMainState.recommendedQuests.length,
                       itemBuilder: (context, index) {
                         final quest = questsMainState.recommendedQuests[index];
-                        return recommendedQuestCard(quest);
+                        return recommendedQuestCard(
+                            quest,
+                            viewModel.onClickRecommendedQuest
+                        );
                       },
                     ),
                   ),
