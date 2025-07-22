@@ -15,6 +15,11 @@ abstract class ProfileState with _$ProfileState {
     @Default([]) List<QuestCategory> selectedCategories,
     @Default(false) bool isLoading,
     @Default(false) bool isSaving,
+    @Default(false) bool isLoadingStats,
+    @Default(0) int completedQuestsCount,
+    @Default(0) int activeQuestsCount,
+    @Default(0) int pendingQuestsCount,
+    @Default(0) int totalQuestsCount,
     String? errorMessage,
   }) = _ProfileState;
 

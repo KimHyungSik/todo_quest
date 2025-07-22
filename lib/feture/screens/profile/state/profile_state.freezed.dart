@@ -20,6 +20,11 @@ mixin _$ProfileState {
   List<QuestCategory> get selectedCategories;
   bool get isLoading;
   bool get isSaving;
+  bool get isLoadingStats;
+  int get completedQuestsCount;
+  int get activeQuestsCount;
+  int get pendingQuestsCount;
+  int get totalQuestsCount;
   String? get errorMessage;
 
   /// Create a copy of ProfileState
@@ -48,6 +53,16 @@ mixin _$ProfileState {
                 other.isLoading == isLoading) &&
             (identical(other.isSaving, isSaving) ||
                 other.isSaving == isSaving) &&
+            (identical(other.isLoadingStats, isLoadingStats) ||
+                other.isLoadingStats == isLoadingStats) &&
+            (identical(other.completedQuestsCount, completedQuestsCount) ||
+                other.completedQuestsCount == completedQuestsCount) &&
+            (identical(other.activeQuestsCount, activeQuestsCount) ||
+                other.activeQuestsCount == activeQuestsCount) &&
+            (identical(other.pendingQuestsCount, pendingQuestsCount) ||
+                other.pendingQuestsCount == pendingQuestsCount) &&
+            (identical(other.totalQuestsCount, totalQuestsCount) ||
+                other.totalQuestsCount == totalQuestsCount) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
@@ -61,11 +76,16 @@ mixin _$ProfileState {
       const DeepCollectionEquality().hash(selectedCategories),
       isLoading,
       isSaving,
+      isLoadingStats,
+      completedQuestsCount,
+      activeQuestsCount,
+      pendingQuestsCount,
+      totalQuestsCount,
       errorMessage);
 
   @override
   String toString() {
-    return 'ProfileState(userInfo: $userInfo, allCategories: $allCategories, selectedCategories: $selectedCategories, isLoading: $isLoading, isSaving: $isSaving, errorMessage: $errorMessage)';
+    return 'ProfileState(userInfo: $userInfo, allCategories: $allCategories, selectedCategories: $selectedCategories, isLoading: $isLoading, isSaving: $isSaving, isLoadingStats: $isLoadingStats, completedQuestsCount: $completedQuestsCount, activeQuestsCount: $activeQuestsCount, pendingQuestsCount: $pendingQuestsCount, totalQuestsCount: $totalQuestsCount, errorMessage: $errorMessage)';
   }
 }
 
@@ -81,6 +101,11 @@ abstract mixin class $ProfileStateCopyWith<$Res> {
       List<QuestCategory> selectedCategories,
       bool isLoading,
       bool isSaving,
+      bool isLoadingStats,
+      int completedQuestsCount,
+      int activeQuestsCount,
+      int pendingQuestsCount,
+      int totalQuestsCount,
       String? errorMessage});
 
   $UserInfoCopyWith<$Res>? get userInfo;
@@ -103,6 +128,11 @@ class _$ProfileStateCopyWithImpl<$Res> implements $ProfileStateCopyWith<$Res> {
     Object? selectedCategories = null,
     Object? isLoading = null,
     Object? isSaving = null,
+    Object? isLoadingStats = null,
+    Object? completedQuestsCount = null,
+    Object? activeQuestsCount = null,
+    Object? pendingQuestsCount = null,
+    Object? totalQuestsCount = null,
     Object? errorMessage = freezed,
   }) {
     return _then(_self.copyWith(
@@ -126,6 +156,26 @@ class _$ProfileStateCopyWithImpl<$Res> implements $ProfileStateCopyWith<$Res> {
           ? _self.isSaving
           : isSaving // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoadingStats: null == isLoadingStats
+          ? _self.isLoadingStats
+          : isLoadingStats // ignore: cast_nullable_to_non_nullable
+              as bool,
+      completedQuestsCount: null == completedQuestsCount
+          ? _self.completedQuestsCount
+          : completedQuestsCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      activeQuestsCount: null == activeQuestsCount
+          ? _self.activeQuestsCount
+          : activeQuestsCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      pendingQuestsCount: null == pendingQuestsCount
+          ? _self.pendingQuestsCount
+          : pendingQuestsCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalQuestsCount: null == totalQuestsCount
+          ? _self.totalQuestsCount
+          : totalQuestsCount // ignore: cast_nullable_to_non_nullable
+              as int,
       errorMessage: freezed == errorMessage
           ? _self.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -157,6 +207,11 @@ class _ProfileState extends ProfileState {
       final List<QuestCategory> selectedCategories = const [],
       this.isLoading = false,
       this.isSaving = false,
+      this.isLoadingStats = false,
+      this.completedQuestsCount = 0,
+      this.activeQuestsCount = 0,
+      this.pendingQuestsCount = 0,
+      this.totalQuestsCount = 0,
       this.errorMessage})
       : _allCategories = allCategories,
         _selectedCategories = selectedCategories,
@@ -192,6 +247,21 @@ class _ProfileState extends ProfileState {
   @JsonKey()
   final bool isSaving;
   @override
+  @JsonKey()
+  final bool isLoadingStats;
+  @override
+  @JsonKey()
+  final int completedQuestsCount;
+  @override
+  @JsonKey()
+  final int activeQuestsCount;
+  @override
+  @JsonKey()
+  final int pendingQuestsCount;
+  @override
+  @JsonKey()
+  final int totalQuestsCount;
+  @override
   final String? errorMessage;
 
   /// Create a copy of ProfileState
@@ -224,6 +294,16 @@ class _ProfileState extends ProfileState {
                 other.isLoading == isLoading) &&
             (identical(other.isSaving, isSaving) ||
                 other.isSaving == isSaving) &&
+            (identical(other.isLoadingStats, isLoadingStats) ||
+                other.isLoadingStats == isLoadingStats) &&
+            (identical(other.completedQuestsCount, completedQuestsCount) ||
+                other.completedQuestsCount == completedQuestsCount) &&
+            (identical(other.activeQuestsCount, activeQuestsCount) ||
+                other.activeQuestsCount == activeQuestsCount) &&
+            (identical(other.pendingQuestsCount, pendingQuestsCount) ||
+                other.pendingQuestsCount == pendingQuestsCount) &&
+            (identical(other.totalQuestsCount, totalQuestsCount) ||
+                other.totalQuestsCount == totalQuestsCount) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
@@ -237,11 +317,16 @@ class _ProfileState extends ProfileState {
       const DeepCollectionEquality().hash(_selectedCategories),
       isLoading,
       isSaving,
+      isLoadingStats,
+      completedQuestsCount,
+      activeQuestsCount,
+      pendingQuestsCount,
+      totalQuestsCount,
       errorMessage);
 
   @override
   String toString() {
-    return 'ProfileState(userInfo: $userInfo, allCategories: $allCategories, selectedCategories: $selectedCategories, isLoading: $isLoading, isSaving: $isSaving, errorMessage: $errorMessage)';
+    return 'ProfileState(userInfo: $userInfo, allCategories: $allCategories, selectedCategories: $selectedCategories, isLoading: $isLoading, isSaving: $isSaving, isLoadingStats: $isLoadingStats, completedQuestsCount: $completedQuestsCount, activeQuestsCount: $activeQuestsCount, pendingQuestsCount: $pendingQuestsCount, totalQuestsCount: $totalQuestsCount, errorMessage: $errorMessage)';
   }
 }
 
@@ -259,6 +344,11 @@ abstract mixin class _$ProfileStateCopyWith<$Res>
       List<QuestCategory> selectedCategories,
       bool isLoading,
       bool isSaving,
+      bool isLoadingStats,
+      int completedQuestsCount,
+      int activeQuestsCount,
+      int pendingQuestsCount,
+      int totalQuestsCount,
       String? errorMessage});
 
   @override
@@ -283,6 +373,11 @@ class __$ProfileStateCopyWithImpl<$Res>
     Object? selectedCategories = null,
     Object? isLoading = null,
     Object? isSaving = null,
+    Object? isLoadingStats = null,
+    Object? completedQuestsCount = null,
+    Object? activeQuestsCount = null,
+    Object? pendingQuestsCount = null,
+    Object? totalQuestsCount = null,
     Object? errorMessage = freezed,
   }) {
     return _then(_ProfileState(
@@ -306,6 +401,26 @@ class __$ProfileStateCopyWithImpl<$Res>
           ? _self.isSaving
           : isSaving // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoadingStats: null == isLoadingStats
+          ? _self.isLoadingStats
+          : isLoadingStats // ignore: cast_nullable_to_non_nullable
+              as bool,
+      completedQuestsCount: null == completedQuestsCount
+          ? _self.completedQuestsCount
+          : completedQuestsCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      activeQuestsCount: null == activeQuestsCount
+          ? _self.activeQuestsCount
+          : activeQuestsCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      pendingQuestsCount: null == pendingQuestsCount
+          ? _self.pendingQuestsCount
+          : pendingQuestsCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalQuestsCount: null == totalQuestsCount
+          ? _self.totalQuestsCount
+          : totalQuestsCount // ignore: cast_nullable_to_non_nullable
+              as int,
       errorMessage: freezed == errorMessage
           ? _self.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable

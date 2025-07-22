@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_quest/feture/screens/profile/profile_viewmodel.dart';
 import 'package:todo_quest/feture/screens/profile/widget/multi_select_category_widget.dart';
-import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
-import 'package:todo_quest/screens/login_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -27,7 +25,7 @@ class ProfileScreen extends ConsumerWidget {
                       _buildProfileHeader(context, profileState),
                       const SizedBox(height: 24),
 
-                      _buildStatsCard(context, profileState),
+                      _buildStatsCard(context, profileState, viewModel),
                       const SizedBox(height: 24),
 
                       // Category preferences section
@@ -137,7 +135,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatsCard(BuildContext context, profileState) {
+  Widget _buildStatsCard(BuildContext context, profileState, viewModel) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -151,22 +149,61 @@ class ProfileScreen extends ConsumerWidget {
                   ),
             ),
             const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildStatItem(context, '완료', '0', Icons.check_circle),
-                _buildStatItem(context, '진행중', '0', Icons.hourglass_empty),
-                _buildStatItem(context, '대기중', '0', Icons.pending),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '퀘스트 통계는 향후 업데이트에서 제공됩니다.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontStyle: FontStyle.italic,
-                  ),
-            ),
+            if (profileState.isLoadingStats) ...[
+              const SizedBox(height: 16),
+              const Center(child: CircularProgressIndicator()),
+              const SizedBox(height: 16),
+            ] else ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildStatItem(context, '완료', '${profileState.completedQuestsCount}', Icons.check_circle, Colors.green),
+                  _buildStatItem(context, '진행중', '${profileState.activeQuestsCount}', Icons.hourglass_empty, Colors.blue),
+                  _buildStatItem(context, '대기중', '${profileState.pendingQuestsCount}', Icons.pending, Colors.orange),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Total quests summary with refresh button
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '총 퀘스트 수',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '${profileState.totalQuestsCount}개',
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        InkWell(
+                          onTap: () => viewModel.refreshQuestStatistics(),
+                          child: Icon(
+                            Icons.refresh,
+                            size: 18,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -174,24 +211,28 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _buildStatItem(
-      BuildContext context, String label, String value, IconData icon) {
+      BuildContext context, String label, String value, IconData icon, Color color) {
     return Column(
       children: [
         Icon(
           icon,
-          color: Theme.of(context).colorScheme.primary,
+          color: color,
+          size: 28,
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Text(
           value,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
+                color: color,
               ),
         ),
+        const SizedBox(height: 4),
         Text(
           label,
-          style: Theme.of(context).textTheme.bodySmall,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );

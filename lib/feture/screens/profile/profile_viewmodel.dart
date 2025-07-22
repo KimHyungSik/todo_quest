@@ -4,6 +4,7 @@ import 'package:todo_quest/feture/screens/profile/state/profile_state.dart';
 import '../../../models/quest/category/quest_category.dart';
 import '../../../repositories/quest_repository/quest_respository.dart';
 import '../../../repositories/user_repository/user_repository.dart';
+import '../../../repositories/user_repository/user_quest_repository.dart';
 
 class ProfileViewModel extends StateNotifier<ProfileState> {
   ProfileViewModel() : super(ProfileState()) {
@@ -12,6 +13,7 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
 
   final QuestRepository _questRepository = QuestRepository();
   final UserRepository _userRepository = UserRepository(Supabase.instance.client);
+  final UserQuestRepository _userQuestRepository = UserQuestRepository(Supabase.instance.client);
 
   Future<void> _initialize() async {
     state = state.copyWith(isLoading: true, errorMessage: null);
@@ -29,6 +31,9 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
         allCategories: categories,
         isLoading: false,
       );
+      
+      // Load quest statistics after basic profile loads
+      await _loadQuestStatistics();
     } catch (error) {
       state = state.copyWith(
         isLoading: false,
@@ -83,6 +88,38 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
 
   Future<void> refreshProfile() async {
     await _initialize();
+  }
+
+  // Load quest statistics
+  Future<void> _loadQuestStatistics() async {
+    state = state.copyWith(isLoadingStats: true);
+    
+    try {
+      // Load all user quests
+      final allUserQuests = await _userQuestRepository.getAllQuests();
+      
+      // Calculate statistics
+      final completedCount = allUserQuests.where((q) => q.isCompleted).length;
+      final activeCount = allUserQuests.where((q) => q.isInProgress).length;
+      final pendingCount = allUserQuests.where((q) => q.isPending).length;
+      final totalCount = allUserQuests.length;
+      
+      state = state.copyWith(
+        isLoadingStats: false,
+        completedQuestsCount: completedCount,
+        activeQuestsCount: activeCount,
+        pendingQuestsCount: pendingCount,
+        totalQuestsCount: totalCount,
+      );
+    } catch (error) {
+      print('퀘스트 통계 로드 중 오류 발생: $error');
+      state = state.copyWith(isLoadingStats: false);
+    }
+  }
+
+  // Refresh quest statistics
+  Future<void> refreshQuestStatistics() async {
+    await _loadQuestStatistics();
   }
 }
 
