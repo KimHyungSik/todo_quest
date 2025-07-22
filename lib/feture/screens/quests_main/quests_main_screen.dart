@@ -150,7 +150,7 @@ class QuestsMainScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     SizedBox(
-                      height: 140,
+                      height: 166,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: questsMainState.activeQuests.length,
