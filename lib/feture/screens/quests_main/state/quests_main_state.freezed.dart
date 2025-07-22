@@ -19,6 +19,9 @@ mixin _$QuestsMainState {
   QuestCategory? get selectedCategory;
   bool get isLoading;
   bool get isRefreshing;
+  bool get isSelectingQuest;
+  String? get successMessage;
+  String? get errorMessage;
 
   /// Create a copy of QuestsMainState
   /// with the given fields replaced by the non-null parameter values.
@@ -43,7 +46,13 @@ mixin _$QuestsMainState {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isRefreshing, isRefreshing) ||
-                other.isRefreshing == isRefreshing));
+                other.isRefreshing == isRefreshing) &&
+            (identical(other.isSelectingQuest, isSelectingQuest) ||
+                other.isSelectingQuest == isSelectingQuest) &&
+            (identical(other.successMessage, successMessage) ||
+                other.successMessage == successMessage) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -53,11 +62,14 @@ mixin _$QuestsMainState {
       const DeepCollectionEquality().hash(recommendedQuests),
       selectedCategory,
       isLoading,
-      isRefreshing);
+      isRefreshing,
+      isSelectingQuest,
+      successMessage,
+      errorMessage);
 
   @override
   String toString() {
-    return 'QuestsMainState(recommendedQuests: $recommendedQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing)';
+    return 'QuestsMainState(recommendedQuests: $recommendedQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing, isSelectingQuest: $isSelectingQuest, successMessage: $successMessage, errorMessage: $errorMessage)';
   }
 }
 
@@ -71,7 +83,10 @@ abstract mixin class $QuestsMainStateCopyWith<$Res> {
       {List<Quest> recommendedQuests,
       QuestCategory? selectedCategory,
       bool isLoading,
-      bool isRefreshing});
+      bool isRefreshing,
+      bool isSelectingQuest,
+      String? successMessage,
+      String? errorMessage});
 
   $QuestCategoryCopyWith<$Res>? get selectedCategory;
 }
@@ -93,6 +108,9 @@ class _$QuestsMainStateCopyWithImpl<$Res>
     Object? selectedCategory = freezed,
     Object? isLoading = null,
     Object? isRefreshing = null,
+    Object? isSelectingQuest = null,
+    Object? successMessage = freezed,
+    Object? errorMessage = freezed,
   }) {
     return _then(_self.copyWith(
       recommendedQuests: null == recommendedQuests
@@ -111,6 +129,18 @@ class _$QuestsMainStateCopyWithImpl<$Res>
           ? _self.isRefreshing
           : isRefreshing // ignore: cast_nullable_to_non_nullable
               as bool,
+      isSelectingQuest: null == isSelectingQuest
+          ? _self.isSelectingQuest
+          : isSelectingQuest // ignore: cast_nullable_to_non_nullable
+              as bool,
+      successMessage: freezed == successMessage
+          ? _self.successMessage
+          : successMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      errorMessage: freezed == errorMessage
+          ? _self.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 
@@ -136,7 +166,10 @@ class _QuestsMainState extends QuestsMainState {
       {final List<Quest> recommendedQuests = const [],
       this.selectedCategory,
       this.isLoading = false,
-      this.isRefreshing = false})
+      this.isRefreshing = false,
+      this.isSelectingQuest = false,
+      this.successMessage,
+      this.errorMessage})
       : _recommendedQuests = recommendedQuests,
         super._();
   factory _QuestsMainState.fromJson(Map<String, dynamic> json) =>
@@ -160,6 +193,13 @@ class _QuestsMainState extends QuestsMainState {
   @override
   @JsonKey()
   final bool isRefreshing;
+  @override
+  @JsonKey()
+  final bool isSelectingQuest;
+  @override
+  final String? successMessage;
+  @override
+  final String? errorMessage;
 
   /// Create a copy of QuestsMainState
   /// with the given fields replaced by the non-null parameter values.
@@ -188,7 +228,13 @@ class _QuestsMainState extends QuestsMainState {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isRefreshing, isRefreshing) ||
-                other.isRefreshing == isRefreshing));
+                other.isRefreshing == isRefreshing) &&
+            (identical(other.isSelectingQuest, isSelectingQuest) ||
+                other.isSelectingQuest == isSelectingQuest) &&
+            (identical(other.successMessage, successMessage) ||
+                other.successMessage == successMessage) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -198,11 +244,14 @@ class _QuestsMainState extends QuestsMainState {
       const DeepCollectionEquality().hash(_recommendedQuests),
       selectedCategory,
       isLoading,
-      isRefreshing);
+      isRefreshing,
+      isSelectingQuest,
+      successMessage,
+      errorMessage);
 
   @override
   String toString() {
-    return 'QuestsMainState(recommendedQuests: $recommendedQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing)';
+    return 'QuestsMainState(recommendedQuests: $recommendedQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing, isSelectingQuest: $isSelectingQuest, successMessage: $successMessage, errorMessage: $errorMessage)';
   }
 }
 
@@ -218,7 +267,10 @@ abstract mixin class _$QuestsMainStateCopyWith<$Res>
       {List<Quest> recommendedQuests,
       QuestCategory? selectedCategory,
       bool isLoading,
-      bool isRefreshing});
+      bool isRefreshing,
+      bool isSelectingQuest,
+      String? successMessage,
+      String? errorMessage});
 
   @override
   $QuestCategoryCopyWith<$Res>? get selectedCategory;
@@ -241,6 +293,9 @@ class __$QuestsMainStateCopyWithImpl<$Res>
     Object? selectedCategory = freezed,
     Object? isLoading = null,
     Object? isRefreshing = null,
+    Object? isSelectingQuest = null,
+    Object? successMessage = freezed,
+    Object? errorMessage = freezed,
   }) {
     return _then(_QuestsMainState(
       recommendedQuests: null == recommendedQuests
@@ -259,6 +314,18 @@ class __$QuestsMainStateCopyWithImpl<$Res>
           ? _self.isRefreshing
           : isRefreshing // ignore: cast_nullable_to_non_nullable
               as bool,
+      isSelectingQuest: null == isSelectingQuest
+          ? _self.isSelectingQuest
+          : isSelectingQuest // ignore: cast_nullable_to_non_nullable
+              as bool,
+      successMessage: freezed == successMessage
+          ? _self.successMessage
+          : successMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      errorMessage: freezed == errorMessage
+          ? _self.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 

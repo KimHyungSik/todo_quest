@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_quest/feture/screens/quests_main/quests_main_viewmodel.dart';
 import 'package:todo_quest/feture/screens/quests_main/widget/recommended_quest_card.dart';
-import 'package:todo_quest/feture/screens/quests_main/widget/category_selector.dart';
 import 'package:todo_quest/feture/screens/profile/profile_screen.dart';
 import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 import 'package:todo_quest/screens/login_screen.dart';
@@ -83,11 +82,75 @@ class QuestsMainScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
+                  
+                  // Success message
+                  if (questsMainState.successMessage != null)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              questsMainState.successMessage!,
+                              style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  
+                  // Error message
+                  if (questsMainState.errorMessage != null)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.error_outline, color: Colors.red, size: 20),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              questsMainState.errorMessage!,
+                              style: const TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
                   // Show quests with populated categories and titles
                   Expanded(
                     child: questsMainState.isLoading || questsMainState.isRefreshing
                         ? const Center(child: CircularProgressIndicator())
+                        : questsMainState.isSelectingQuest
+                            ? const Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      '퀘스트를 시작하는 중...',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                              )
                         : questsMainState.recommendedQuests.isEmpty
                             ? Center(
                                 child: Column(

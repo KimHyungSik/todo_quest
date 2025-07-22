@@ -14,6 +14,9 @@ abstract class QuestsMainState with _$QuestsMainState{
     QuestCategory? selectedCategory,
     @Default(false) bool isLoading,
     @Default(false) bool isRefreshing,
+    @Default(false) bool isSelectingQuest,
+    String? successMessage,
+    String? errorMessage,
   }) = _QuestsMainState;
 
   factory QuestsMainState.fromJson(Map<String, dynamic> json) => _$QuestsMainStateFromJson(json);

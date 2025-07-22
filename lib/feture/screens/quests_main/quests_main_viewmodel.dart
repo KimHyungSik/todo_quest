@@ -27,8 +27,55 @@ class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
     );
   }
 
-  void onClickRecommendedQuest(Quest quest) {
-    print("LOGEE $quest");
+  Future<void> onClickRecommendedQuest(Quest quest) async {
+    // 퀘스트 선택 시작 - 로딩 상태 설정
+    state = state.copyWith(
+      isSelectingQuest: true,
+      successMessage: null,
+      errorMessage: null,
+    );
+    
+    try {
+      final result = await _questRepository.selectQuest(quest.id.toString());
+      
+      if (result.success) {
+        // 퀘스트 선택 성공
+        state = state.copyWith(
+          isSelectingQuest: false,
+          successMessage: result.message,
+        );
+        
+        // 퀘스트 목록 새로고침
+        await refreshQuests();
+        
+        // 성공 메시지를 3초 후 자동 제거
+        Future.delayed(const Duration(seconds: 3), () {
+          state = state.copyWith(successMessage: null);
+        });
+      } else {
+        // 퀘스트 선택 실패
+        state = state.copyWith(
+          isSelectingQuest: false,
+          errorMessage: result.message,
+        );
+        
+        // 에러 메시지를 5초 후 자동 제거
+        Future.delayed(const Duration(seconds: 5), () {
+          state = state.copyWith(errorMessage: null);
+        });
+      }
+    } catch (e) {
+      // 예외 발생
+      state = state.copyWith(
+        isSelectingQuest: false,
+        errorMessage: '퀘스트 선택 중 오류가 발생했습니다: $e',
+      );
+      
+      // 에러 메시지를 5초 후 자동 제거
+      Future.delayed(const Duration(seconds: 5), () {
+        state = state.copyWith(errorMessage: null);
+      });
+    }
   }
 
   // 카테고리 선택

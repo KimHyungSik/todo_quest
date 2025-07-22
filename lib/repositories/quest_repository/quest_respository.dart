@@ -167,6 +167,22 @@ class QuestRepository {
         .toList();
   }
 
+  // 모든 카테고리 가져오기
+  Future<List<QuestCategory>> getAllCategories() async {
+    try {
+      final response = await supabase
+          .from(QuestConstants.categoriesTable)
+          .select();
+
+      return response
+          .map<QuestCategory>((res) => QuestCategory.fromJson(res))
+          .toList();
+    } catch (e) {
+      print('카테고리를 가져오는 중 오류 발생: $e');
+      return [];
+    }
+  }
+
   // ID 목록으로 여러 카테고리 가져오기
   Future<List<QuestCategory>> getCategories(List<int> categoryIds) async {
     if (categoryIds.isEmpty) return [];

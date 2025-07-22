@@ -18,6 +18,9 @@ _QuestsMainState _$QuestsMainStateFromJson(Map<String, dynamic> json) =>
               json['selectedCategory'] as Map<String, dynamic>),
       isLoading: json['isLoading'] as bool? ?? false,
       isRefreshing: json['isRefreshing'] as bool? ?? false,
+      isSelectingQuest: json['isSelectingQuest'] as bool? ?? false,
+      successMessage: json['successMessage'] as String?,
+      errorMessage: json['errorMessage'] as String?,
     );
 
 Map<String, dynamic> _$QuestsMainStateToJson(_QuestsMainState instance) =>
@@ -26,4 +29,7 @@ Map<String, dynamic> _$QuestsMainStateToJson(_QuestsMainState instance) =>
       'selectedCategory': instance.selectedCategory,
       'isLoading': instance.isLoading,
       'isRefreshing': instance.isRefreshing,
+      'isSelectingQuest': instance.isSelectingQuest,
+      'successMessage': instance.successMessage,
+      'errorMessage': instance.errorMessage,
     };
