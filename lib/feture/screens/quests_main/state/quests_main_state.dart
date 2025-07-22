@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../models/quest/quest.dart';
+import '../../../../models/quest/category/quest_category.dart';
 
 part 'quests_main_state.freezed.dart';
 part 'quests_main_state.g.dart';
@@ -10,6 +11,7 @@ abstract class QuestsMainState with _$QuestsMainState{
 
   factory QuestsMainState({
     @Default([]) List<Quest> recommendedQuests,
+    QuestCategory? selectedCategory,
     @Default(false) bool isLoading,
     @Default(false) bool isRefreshing,
   }) = _QuestsMainState;

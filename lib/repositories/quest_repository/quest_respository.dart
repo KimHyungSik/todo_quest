@@ -87,6 +87,22 @@ class QuestRepository {
         .toList();
   }
 
+  // 모든 카테고리 가져오기
+  Future<List<QuestCategory>> getAllCategories() async {
+    try {
+      final response = await supabase
+          .from(QuestConstants.categoriesTable)
+          .select();
+      
+      return response
+          .map<QuestCategory>((res) => QuestCategory.fromJson(res))
+          .toList();
+    } catch (e) {
+      print('카테고리를 가져오는 중 오류 발생: $e');
+      return [];
+    }
+  }
+
   // 타이틀과 카테고리 데이터가 포함된 퀘스트 가져오기
   Future<List<Quest>> getQuestsWithRelations() async {
     final List<Quest> quests = await getQuestRecommendations();
@@ -102,4 +118,10 @@ final questRepositoryProvider = Provider<QuestRepository>((ref) {
 final questsWithRelationsProvider = FutureProvider<List<Quest>>((ref) async {
   final repository = ref.watch(questRepositoryProvider);
   return repository.getQuestsWithRelations();
+});
+
+// 카테고리 프로바이더 추가
+final categoriesProvider = FutureProvider<List<QuestCategory>>((ref) async {
+  final repository = ref.watch(questRepositoryProvider);
+  return repository.getAllCategories();
 });

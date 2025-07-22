@@ -16,6 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$QuestsMainState {
   List<Quest> get recommendedQuests;
+  QuestCategory? get selectedCategory;
   bool get isLoading;
   bool get isRefreshing;
 
@@ -37,6 +38,8 @@ mixin _$QuestsMainState {
             other is QuestsMainState &&
             const DeepCollectionEquality()
                 .equals(other.recommendedQuests, recommendedQuests) &&
+            (identical(other.selectedCategory, selectedCategory) ||
+                other.selectedCategory == selectedCategory) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isRefreshing, isRefreshing) ||
@@ -48,12 +51,13 @@ mixin _$QuestsMainState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(recommendedQuests),
+      selectedCategory,
       isLoading,
       isRefreshing);
 
   @override
   String toString() {
-    return 'QuestsMainState(recommendedQuests: $recommendedQuests, isLoading: $isLoading, isRefreshing: $isRefreshing)';
+    return 'QuestsMainState(recommendedQuests: $recommendedQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing)';
   }
 }
 
@@ -63,7 +67,13 @@ abstract mixin class $QuestsMainStateCopyWith<$Res> {
           QuestsMainState value, $Res Function(QuestsMainState) _then) =
       _$QuestsMainStateCopyWithImpl;
   @useResult
-  $Res call({List<Quest> recommendedQuests, bool isLoading, bool isRefreshing});
+  $Res call(
+      {List<Quest> recommendedQuests,
+      QuestCategory? selectedCategory,
+      bool isLoading,
+      bool isRefreshing});
+
+  $QuestCategoryCopyWith<$Res>? get selectedCategory;
 }
 
 /// @nodoc
@@ -80,6 +90,7 @@ class _$QuestsMainStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? recommendedQuests = null,
+    Object? selectedCategory = freezed,
     Object? isLoading = null,
     Object? isRefreshing = null,
   }) {
@@ -88,6 +99,10 @@ class _$QuestsMainStateCopyWithImpl<$Res>
           ? _self.recommendedQuests
           : recommendedQuests // ignore: cast_nullable_to_non_nullable
               as List<Quest>,
+      selectedCategory: freezed == selectedCategory
+          ? _self.selectedCategory
+          : selectedCategory // ignore: cast_nullable_to_non_nullable
+              as QuestCategory?,
       isLoading: null == isLoading
           ? _self.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -98,6 +113,20 @@ class _$QuestsMainStateCopyWithImpl<$Res>
               as bool,
     ));
   }
+
+  /// Create a copy of QuestsMainState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $QuestCategoryCopyWith<$Res>? get selectedCategory {
+    if (_self.selectedCategory == null) {
+      return null;
+    }
+
+    return $QuestCategoryCopyWith<$Res>(_self.selectedCategory!, (value) {
+      return _then(_self.copyWith(selectedCategory: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -105,6 +134,7 @@ class _$QuestsMainStateCopyWithImpl<$Res>
 class _QuestsMainState extends QuestsMainState {
   _QuestsMainState(
       {final List<Quest> recommendedQuests = const [],
+      this.selectedCategory,
       this.isLoading = false,
       this.isRefreshing = false})
       : _recommendedQuests = recommendedQuests,
@@ -122,6 +152,8 @@ class _QuestsMainState extends QuestsMainState {
     return EqualUnmodifiableListView(_recommendedQuests);
   }
 
+  @override
+  final QuestCategory? selectedCategory;
   @override
   @JsonKey()
   final bool isLoading;
@@ -151,6 +183,8 @@ class _QuestsMainState extends QuestsMainState {
             other is _QuestsMainState &&
             const DeepCollectionEquality()
                 .equals(other._recommendedQuests, _recommendedQuests) &&
+            (identical(other.selectedCategory, selectedCategory) ||
+                other.selectedCategory == selectedCategory) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isRefreshing, isRefreshing) ||
@@ -162,12 +196,13 @@ class _QuestsMainState extends QuestsMainState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_recommendedQuests),
+      selectedCategory,
       isLoading,
       isRefreshing);
 
   @override
   String toString() {
-    return 'QuestsMainState(recommendedQuests: $recommendedQuests, isLoading: $isLoading, isRefreshing: $isRefreshing)';
+    return 'QuestsMainState(recommendedQuests: $recommendedQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing)';
   }
 }
 
@@ -179,7 +214,14 @@ abstract mixin class _$QuestsMainStateCopyWith<$Res>
       __$QuestsMainStateCopyWithImpl;
   @override
   @useResult
-  $Res call({List<Quest> recommendedQuests, bool isLoading, bool isRefreshing});
+  $Res call(
+      {List<Quest> recommendedQuests,
+      QuestCategory? selectedCategory,
+      bool isLoading,
+      bool isRefreshing});
+
+  @override
+  $QuestCategoryCopyWith<$Res>? get selectedCategory;
 }
 
 /// @nodoc
@@ -196,6 +238,7 @@ class __$QuestsMainStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? recommendedQuests = null,
+    Object? selectedCategory = freezed,
     Object? isLoading = null,
     Object? isRefreshing = null,
   }) {
@@ -204,6 +247,10 @@ class __$QuestsMainStateCopyWithImpl<$Res>
           ? _self._recommendedQuests
           : recommendedQuests // ignore: cast_nullable_to_non_nullable
               as List<Quest>,
+      selectedCategory: freezed == selectedCategory
+          ? _self.selectedCategory
+          : selectedCategory // ignore: cast_nullable_to_non_nullable
+              as QuestCategory?,
       isLoading: null == isLoading
           ? _self.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -213,6 +260,20 @@ class __$QuestsMainStateCopyWithImpl<$Res>
           : isRefreshing // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
+  }
+
+  /// Create a copy of QuestsMainState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $QuestCategoryCopyWith<$Res>? get selectedCategory {
+    if (_self.selectedCategory == null) {
+      return null;
+    }
+
+    return $QuestCategoryCopyWith<$Res>(_self.selectedCategory!, (value) {
+      return _then(_self.copyWith(selectedCategory: value));
+    });
   }
 }
 
