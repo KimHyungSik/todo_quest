@@ -20,7 +20,15 @@ Widget recommendedQuestCard(
               quest.title,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
+
+            if (quest.categoriesList?.first.name != null)
+              Text(
+                quest.categoriesList!.first.name,
+                style: const TextStyle(fontSize: 10),
+              ),
+
+            const SizedBox(height: 2),
 
             // Quest description
             if (quest.description != null) Text(quest.description!),
@@ -37,7 +45,8 @@ Widget recommendedQuestCard(
               ),
 
             // Show quest categories if available
-            if (quest.categoriesList != null && quest.categoriesList!.isNotEmpty)
+            if (quest.categoriesList != null &&
+                quest.categoriesList!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Wrap(

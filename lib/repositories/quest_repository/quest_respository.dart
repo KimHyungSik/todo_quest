@@ -51,6 +51,99 @@ class QuestRepository {
     }
   }
 
+  /// 퀘스트를 시작하는 함수
+  ///
+  /// [questId] - 시작할 퀘스트의 ID
+  /// 반환값: QuestStartResult 객체 (성공/실패 상태와 메시지 포함)
+  Future<QuestStartResult> startQuest(String questId) async {
+    try {
+      final currentUser = supabase.auth.currentUser;
+      if (currentUser == null) {
+        return QuestStartResult(
+          success: false,
+          message: '로그인이 필요합니다.',
+        );
+      }
+
+      final response = await supabase.rpc(
+        'start_quest',
+        params: {
+          'p_user_id': currentUser.id,
+          'p_quest_id': questId,
+        },
+      );
+
+      if (response == null) {
+        return QuestStartResult(
+          success: false,
+          message: '서버 응답이 없습니다.',
+        );
+      }
+
+      final result = response as Map<String, dynamic>;
+
+      return QuestStartResult(
+        success: result['success'] ?? false,
+        message: result['message'] ?? '알 수 없는 오류가 발생했습니다.',
+        userQuestId: result['data']?['user_quest_id'],
+        questTitle: result['data']?['quest_title'],
+      );
+
+    } catch (e) {
+      print('퀘스트 시작 중 오류 발생: $e');
+      return QuestStartResult(
+        success: false,
+        message: '퀘스트 시작 중 오류가 발생했습니다: $e',
+      );
+    }
+  }
+
+  /// 퀘스트를 선택하는 함수 (기존 select_quest 함수 사용)
+  ///
+  /// [questId] - 선택할 퀘스트의 ID
+  /// 반환값: QuestSelectResult 객체
+  Future<QuestSelectResult> selectQuest(String questId) async {
+    try {
+      final currentUser = supabase.auth.currentUser;
+      if (currentUser == null) {
+        return QuestSelectResult(
+          success: false,
+          message: '로그인이 필요합니다.',
+        );
+      }
+
+      final response = await supabase.rpc(
+        'select_quest',
+        params: {
+          'p_user_id': currentUser.id,
+          'p_quest_id': questId,
+        },
+      );
+
+      if (response == null) {
+        return QuestSelectResult(
+          success: false,
+          message: '서버 응답이 없습니다.',
+        );
+      }
+
+      final result = response as Map<String, dynamic>;
+
+      return QuestSelectResult(
+        success: result['success'] ?? false,
+        message: result['message'] ?? '알 수 없는 오류가 발생했습니다.',
+        userQuestId: result['data']?['user_quest_id'],
+      );
+
+    } catch (e) {
+      print('퀘스트 선택 중 오류 발생: $e');
+      return QuestSelectResult(
+        success: false,
+        message: '퀘스트 선택 중 오류가 발생했습니다: $e',
+      );
+    }
+  }
+
   // ID로 특정 보상 타이틀 가져오기
   Future<RewardTitle> getRewardTitle(int titleId) async {
     final response = await supabase
@@ -87,27 +180,39 @@ class QuestRepository {
         .toList();
   }
 
-  // 모든 카테고리 가져오기
-  Future<List<QuestCategory>> getAllCategories() async {
-    try {
-      final response = await supabase
-          .from(QuestConstants.categoriesTable)
-          .select();
-      
-      return response
-          .map<QuestCategory>((res) => QuestCategory.fromJson(res))
-          .toList();
-    } catch (e) {
-      print('카테고리를 가져오는 중 오류 발생: $e');
-      return [];
-    }
-  }
-
   // 타이틀과 카테고리 데이터가 포함된 퀘스트 가져오기
   Future<List<Quest>> getQuestsWithRelations() async {
     final List<Quest> quests = await getQuestRecommendations();
     return quests;
   }
+}
+
+/// 퀘스트 시작 결과 클래스
+class QuestStartResult {
+  final bool success;
+  final String message;
+  final String? userQuestId;
+  final String? questTitle;
+
+  QuestStartResult({
+    required this.success,
+    required this.message,
+    this.userQuestId,
+    this.questTitle,
+  });
+}
+
+/// 퀘스트 선택 결과 클래스
+class QuestSelectResult {
+  final bool success;
+  final String message;
+  final String? userQuestId;
+
+  QuestSelectResult({
+    required this.success,
+    required this.message,
+    this.userQuestId,
+  });
 }
 
 final questRepositoryProvider = Provider<QuestRepository>((ref) {
@@ -120,8 +225,8 @@ final questsWithRelationsProvider = FutureProvider<List<Quest>>((ref) async {
   return repository.getQuestsWithRelations();
 });
 
-// 카테고리 프로바이더 추가
-final categoriesProvider = FutureProvider<List<QuestCategory>>((ref) async {
+// 퀘스트 시작을 위한 프로바이더 추가
+final startQuestProvider = Provider<Future<QuestStartResult> Function(String)>((ref) {
   final repository = ref.watch(questRepositoryProvider);
-  return repository.getAllCategories();
+  return (String questId) => repository.startQuest(questId);
 });
