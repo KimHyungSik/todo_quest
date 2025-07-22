@@ -9,7 +9,8 @@ class RecommendedQuestsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recommendedQuestsState = ref.watch(recommendedQuestsViewModelProvider);
+    final recommendedQuestsState =
+        ref.watch(recommendedQuestsViewModelProvider);
     final viewModel = ref.read(recommendedQuestsViewModelProvider.notifier);
 
     return Scaffold(
@@ -20,17 +21,6 @@ class RecommendedQuestsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Category selector
-            if (recommendedQuestsState.categories.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              CategorySelector(
-                categories: recommendedQuestsState.categories,
-                selectedCategory: recommendedQuestsState.selectedCategory,
-                onCategorySelected: viewModel.selectCategory,
-              ),
-              const SizedBox(height: 16),
-            ],
-
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -46,11 +36,13 @@ class RecommendedQuestsScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: Colors.green.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                          border: Border.all(
+                              color: Colors.green.withValues(alpha: 0.3)),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                            const Icon(Icons.check_circle,
+                                color: Colors.green, size: 20),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -74,11 +66,13 @@ class RecommendedQuestsScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: Colors.red.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                          border: Border.all(
+                              color: Colors.red.withValues(alpha: 0.3)),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.error_outline, color: Colors.red, size: 20),
+                            const Icon(Icons.error_outline,
+                                color: Colors.red, size: 20),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -98,14 +92,14 @@ class RecommendedQuestsScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          recommendedQuestsState.selectedCategory != null
-                              ? '${recommendedQuestsState.selectedCategory!.name} (${recommendedQuestsState.recommendedQuests.length})'
-                              : '추천 퀘스트 (${recommendedQuestsState.recommendedQuests.length})',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          '추천 퀘스트',
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
-                        if (recommendedQuestsState.isLoading || recommendedQuestsState.isSelectingQuest)
+                        if (recommendedQuestsState.isLoading ||
+                            recommendedQuestsState.isSelectingQuest)
                           const SizedBox(
                             width: 20,
                             height: 20,
@@ -124,7 +118,8 @@ class RecommendedQuestsScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: Colors.blue.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
+                          border: Border.all(
+                              color: Colors.blue.withValues(alpha: 0.3)),
                         ),
                         child: const Row(
                           children: [
@@ -150,11 +145,14 @@ class RecommendedQuestsScreen extends ConsumerWidget {
                       child: recommendedQuestsState.isLoading
                           ? const Center(child: CircularProgressIndicator())
                           : recommendedQuestsState.recommendedQuests.isEmpty
-                              ? _buildEmptyState(context, recommendedQuestsState.selectedCategory?.name)
+                              ? _buildEmptyState(context,
+                                  recommendedQuestsState.selectedCategory?.name)
                               : ListView.builder(
-                                  itemCount: recommendedQuestsState.recommendedQuests.length,
+                                  itemCount: recommendedQuestsState
+                                      .recommendedQuests.length,
                                   itemBuilder: (context, index) {
-                                    final quest = recommendedQuestsState.recommendedQuests[index];
+                                    final quest = recommendedQuestsState
+                                        .recommendedQuests[index];
                                     return recommendedQuestCard(
                                       quest,
                                       viewModel.onClickRecommendedQuest,
@@ -195,9 +193,9 @@ class RecommendedQuestsScreen extends ConsumerWidget {
                 ? '선택한 카테고리에 퀘스트가 없습니다'
                 : '사용 가능한 퀘스트가 없습니다',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
-            ),
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
@@ -206,8 +204,8 @@ class RecommendedQuestsScreen extends ConsumerWidget {
                 ? '다른 카테고리를 선택해보시거나 새로고침을 시도해보세요'
                 : '새로고침을 시도하거나 나중에 다시 확인해보세요',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.grey.shade500,
-            ),
+                  color: Colors.grey.shade500,
+                ),
             textAlign: TextAlign.center,
           ),
         ],

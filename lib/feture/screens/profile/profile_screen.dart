@@ -14,26 +14,6 @@ class ProfileScreen extends ConsumerWidget {
     final viewModel = ref.read(profileViewModelProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('프로필'),
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await ref.read(authRepositoryProvider).signOut();
-              if (context.mounted) {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                  (route) => false,
-                );
-              }
-            },
-          ),
-        ],
-      ),
       body: profileState.isLoading
           ? const Center(child: CircularProgressIndicator())
           : profileState.errorMessage != null
