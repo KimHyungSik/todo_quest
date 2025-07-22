@@ -26,7 +26,10 @@ class ProfileScreen extends ConsumerWidget {
                       // Profile header
                       _buildProfileHeader(context, profileState),
                       const SizedBox(height: 24),
-                      
+
+                      _buildStatsCard(context, profileState),
+                      const SizedBox(height: 24),
+
                       // Category preferences section
                       Card(
                         child: Padding(
@@ -40,15 +43,15 @@ class ProfileScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Save button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: profileState.isSaving 
-                              ? null 
+                          onPressed: profileState.isSaving
+                              ? null
                               : viewModel.savePreferences,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -60,7 +63,8 @@ class ProfileScreen extends ConsumerWidget {
                               ? const SizedBox(
                                   height: 20,
                                   width: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 )
                               : const Text(
                                   '설정 저장',
@@ -71,11 +75,8 @@ class ProfileScreen extends ConsumerWidget {
                                 ),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
-                      // Additional profile stats (future expansion)
-                      _buildStatsCard(context, profileState),
                     ],
                   ),
                 ),
@@ -84,7 +85,7 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _buildProfileHeader(BuildContext context, profileState) {
     final userInfo = profileState.userInfo;
-    
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -92,10 +93,10 @@ class ProfileScreen extends ConsumerWidget {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundImage: userInfo?.profileImage != null 
+              backgroundImage: userInfo?.profileImage != null
                   ? NetworkImage(userInfo!.profileImage!)
                   : null,
-              child: userInfo?.profileImage == null 
+              child: userInfo?.profileImage == null
                   ? const Icon(Icons.person, size: 40)
                   : null,
             ),
@@ -107,23 +108,24 @@ class ProfileScreen extends ConsumerWidget {
                   Text(
                     userInfo?.displayName ?? '사용자',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     userInfo?.email ?? '',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                   ),
                   if (userInfo?.createdAt != null) ...[
                     const SizedBox(height: 8),
                     Text(
                       '가입일: ${userInfo!.timeSinceCreated}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                     ),
                   ],
                 ],
@@ -145,8 +147,8 @@ class ProfileScreen extends ConsumerWidget {
             Text(
               '퀘스트 통계',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 12),
             Row(
@@ -161,9 +163,9 @@ class ProfileScreen extends ConsumerWidget {
             Text(
               '퀘스트 통계는 향후 업데이트에서 제공됩니다.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontStyle: FontStyle.italic,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontStyle: FontStyle.italic,
+                  ),
             ),
           ],
         ),
@@ -171,7 +173,8 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatItem(BuildContext context, String label, String value, IconData icon) {
+  Widget _buildStatItem(
+      BuildContext context, String label, String value, IconData icon) {
     return Column(
       children: [
         Icon(
@@ -182,9 +185,9 @@ class ProfileScreen extends ConsumerWidget {
         Text(
           value,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
         ),
         Text(
           label,
@@ -216,8 +219,8 @@ class ProfileScreen extends ConsumerWidget {
             Text(
               error,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
