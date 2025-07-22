@@ -89,26 +89,6 @@ class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
     }
   }
 
-  // 카테고리 선택
-  Future<void> selectCategory(QuestCategory? category) async {
-    if (state.selectedCategory == category) return;
-    
-    state = state.copyWith(
-      selectedCategory: category,
-      isLoading: true,
-    );
-    
-    // 선택된 카테고리에 따라 퀘스트 로드
-    final quests = await _questRepository.getQuestRecommendations(
-      categoryId: category?.id.toString(),
-    );
-    
-    state = state.copyWith(
-      recommendedQuests: quests,
-      isLoading: false,
-    );
-  }
-
   // 퀘스트 새로고침
   Future<void> refreshQuests() async {
     state = state.copyWith(isRefreshing: true);

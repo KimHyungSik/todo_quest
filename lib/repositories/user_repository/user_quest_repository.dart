@@ -31,6 +31,8 @@ class UserQuestRepository {
         if (status != null) 'p_status': status,
       });
 
+      print("LOGEE $response");
+
       if (response == null) {
         throw Exception('서버 응답이 없습니다.');
       }
