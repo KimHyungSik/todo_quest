@@ -76,7 +76,6 @@ class QuestsMainScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   // Success message
                   if (questsMainState.successMessage != null)
                     Container(
@@ -86,22 +85,26 @@ class QuestsMainScreen extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: Colors.green.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                        border: Border.all(
+                            color: Colors.green.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                          const Icon(Icons.check_circle,
+                              color: Colors.green, size: 20),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               questsMainState.successMessage!,
-                              style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
+                              style: const TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.w500),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  
+
                   // Error message
                   if (questsMainState.errorMessage != null)
                     Container(
@@ -111,16 +114,20 @@ class QuestsMainScreen extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: Colors.red.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                        border: Border.all(
+                            color: Colors.red.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.error_outline, color: Colors.red, size: 20),
+                          const Icon(Icons.error_outline,
+                              color: Colors.red, size: 20),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               questsMainState.errorMessage!,
-                              style: const TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                              style: const TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w500),
                             ),
                           ),
                         ],
@@ -155,11 +162,15 @@ class QuestsMainScreen extends ConsumerWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: questsMainState.activeQuests.length,
                         itemBuilder: (context, index) {
-                          final activeQuest = questsMainState.activeQuests[index];
+                          final activeQuest =
+                              questsMainState.activeQuests[index];
                           return Container(
                             width: 280,
                             margin: EdgeInsets.only(
-                              right: index < questsMainState.activeQuests.length - 1 ? 12 : 0,
+                              right: index <
+                                      questsMainState.activeQuests.length - 1
+                                  ? 12
+                                  : 0,
                             ),
                             child: activeQuestCard(
                               activeQuest,
@@ -175,18 +186,22 @@ class QuestsMainScreen extends ConsumerWidget {
                   ],
 
                   // Recommended quests section title
-                  const Text(
-                    '추천 퀘스트',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  if (!questsMainState.isLoading &&
+                      !questsMainState.isRefreshing &&
+                      questsMainState.recommendedQuests.isNotEmpty)
+                    const Text(
+                      '추천 퀘스트',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
                   const SizedBox(height: 8),
 
                   // Show quests with populated categories and titles
                   Expanded(
-                    child: questsMainState.isLoading || questsMainState.isRefreshing
+                    child: questsMainState.isLoading ||
+                            questsMainState.isRefreshing
                         ? const Center(child: CircularProgressIndicator())
                         : questsMainState.isSelectingQuest
                             ? const Center(
@@ -202,38 +217,43 @@ class QuestsMainScreen extends ConsumerWidget {
                                   ],
                                 ),
                               )
-                        : questsMainState.recommendedQuests.isEmpty
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.search_off,
-                                      size: 64,
-                                      color: Colors.grey,
+                            : questsMainState.recommendedQuests.isEmpty
+                                ? Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.search_off,
+                                          size: 64,
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Text(
+                                          questsMainState.selectedCategory !=
+                                                  null
+                                              ? '선택한 카테고리에 퀘스트가 없습니다'
+                                              : '사용 가능한 퀘스트가 없습니다',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                color: Colors.grey,
+                                              ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      questsMainState.selectedCategory != null
-                                          ? '선택한 카테고리에 퀘스트가 없습니다'
-                                          : '사용 가능한 퀘스트가 없습니다',
-                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: questsMainState.recommendedQuests.length,
-                                itemBuilder: (context, index) {
-                                  final quest = questsMainState.recommendedQuests[index];
-                                  return recommendedQuestCard(
-                                      quest,
-                                      viewModel.onClickRecommendedQuest
-                                  );
-                                },
-                              ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: questsMainState
+                                        .recommendedQuests.length,
+                                    itemBuilder: (context, index) {
+                                      final quest = questsMainState
+                                          .recommendedQuests[index];
+                                      return recommendedQuestCard(quest,
+                                          viewModel.onClickRecommendedQuest);
+                                    },
+                                  ),
                   ),
                 ],
               ),
