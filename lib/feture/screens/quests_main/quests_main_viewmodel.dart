@@ -1,10 +1,14 @@
 // QuestsMainViewModel
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_quest/feture/screens/quests_main/state/quests_main_state.dart';
+import 'package:todo_quest/repositories/user_repository/user_quest_repository.dart';
 
 import '../../../models/quest/quest.dart';
 import '../../../models/quest/category/quest_category.dart';
+import '../../../models/user/user_quest/user_quest.dart';
 import '../../../repositories/quest_repository/quest_respository.dart';
+import '../../../repositories/user_repository/user_repository.dart';
 
 class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
   QuestsMainViewModel() : super(QuestsMainState()) {
@@ -12,17 +16,23 @@ class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
   }
 
   final QuestRepository _questRepository = QuestRepository();
+  final UserRepository _userRepository = UserRepository(Supabase.instance.client);
+  final UserQuestRepository _userQuestRepository = UserQuestRepository(Supabase.instance.client);
 
   // 초기화
   Future<void> _initialize() async {
     state = state.copyWith(isLoading: true);
     
-    final questsFuture = _questRepository.getQuestRecommendations();
-    
-    final recommendedQuests = await questsFuture;
-    
+    // 추천 퀘스트와 활성 퀘스트를 병렬로 로드
+    final recommendedQuestsFuture = _questRepository.getQuestRecommendations();
+    final activeQuestsFuture = _loadActiveQuests();
+
+    final recommendedQuests = await recommendedQuestsFuture;
+    final activeQuests = await activeQuestsFuture;
+
     state = state.copyWith(
       recommendedQuests: recommendedQuests,
+      activeQuests: activeQuests,
       isLoading: false,
     );
   }
@@ -47,6 +57,7 @@ class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
         
         // 퀘스트 목록 새로고침
         await refreshQuests();
+        await refreshActiveQuests();
         
         // 성공 메시지를 3초 후 자동 제거
         Future.delayed(const Duration(seconds: 3), () {
@@ -110,6 +121,34 @@ class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
       recommendedQuests: quests,
       isRefreshing: false,
     );
+  }
+
+  // 활성 퀘스트 로드
+  Future<List<UserQuestInfo>> _loadActiveQuests() async {
+    try {
+      return await _userQuestRepository.getActiveQuests();
+    } catch (e) {
+      print('활성 퀘스트 로드 중 오류 발생: $e');
+      return [];
+    }
+  }
+
+  // 활성 퀘스트 새로고침
+  Future<void> refreshActiveQuests() async {
+    state = state.copyWith(isLoadingActiveQuests: true);
+    
+    final activeQuests = await _loadActiveQuests();
+    
+    state = state.copyWith(
+      activeQuests: activeQuests,
+      isLoadingActiveQuests: false,
+    );
+  }
+
+  // 활성 퀘스트 클릭 처리
+  void onClickActiveQuest(UserQuestInfo userQuest) {
+    print("활성 퀘스트 클릭: ${userQuest.questTitle}");
+    // TODO: 퀘스트 상세 화면으로 이동 또는 퀘스트 관리 기능 추가
   }
 }
 

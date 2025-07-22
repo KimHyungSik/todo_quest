@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_quest/feture/screens/quests_main/quests_main_viewmodel.dart';
 import 'package:todo_quest/feture/screens/quests_main/widget/recommended_quest_card.dart';
+import 'package:todo_quest/feture/screens/quests_main/widget/active_quest_card.dart';
 import 'package:todo_quest/feture/screens/profile/profile_screen.dart';
 import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 import 'package:todo_quest/screens/login_screen.dart';
@@ -60,6 +61,7 @@ class QuestsMainScreen extends ConsumerWidget {
             icon: const Icon(Icons.refresh),
             onPressed: () {
               viewModel.refreshQuests();
+              viewModel.refreshActiveQuests();
             },
           ),
         ],
@@ -74,14 +76,6 @@ class QuestsMainScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '퀘스트 목록',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
                   
                   // Success message
                   if (questsMainState.successMessage != null)
@@ -132,6 +126,63 @@ class QuestsMainScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
+
+                  // Active quests section
+                  if (questsMainState.activeQuests.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '진행 중인 퀘스트',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (questsMainState.isLoadingActiveQuests)
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 140,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: questsMainState.activeQuests.length,
+                        itemBuilder: (context, index) {
+                          final activeQuest = questsMainState.activeQuests[index];
+                          return Container(
+                            width: 280,
+                            margin: EdgeInsets.only(
+                              right: index < questsMainState.activeQuests.length - 1 ? 12 : 0,
+                            ),
+                            child: activeQuestCard(
+                              activeQuest,
+                              viewModel.onClickActiveQuest,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Divider(),
+                    const SizedBox(height: 8),
+                  ],
+
+                  // Recommended quests section title
+                  const Text(
+                    '추천 퀘스트',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
 
                   // Show quests with populated categories and titles
                   Expanded(

@@ -16,10 +16,12 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$QuestsMainState {
   List<Quest> get recommendedQuests;
+  List<UserQuestInfo> get activeQuests;
   QuestCategory? get selectedCategory;
   bool get isLoading;
   bool get isRefreshing;
   bool get isSelectingQuest;
+  bool get isLoadingActiveQuests;
   String? get successMessage;
   String? get errorMessage;
 
@@ -41,6 +43,8 @@ mixin _$QuestsMainState {
             other is QuestsMainState &&
             const DeepCollectionEquality()
                 .equals(other.recommendedQuests, recommendedQuests) &&
+            const DeepCollectionEquality()
+                .equals(other.activeQuests, activeQuests) &&
             (identical(other.selectedCategory, selectedCategory) ||
                 other.selectedCategory == selectedCategory) &&
             (identical(other.isLoading, isLoading) ||
@@ -49,6 +53,8 @@ mixin _$QuestsMainState {
                 other.isRefreshing == isRefreshing) &&
             (identical(other.isSelectingQuest, isSelectingQuest) ||
                 other.isSelectingQuest == isSelectingQuest) &&
+            (identical(other.isLoadingActiveQuests, isLoadingActiveQuests) ||
+                other.isLoadingActiveQuests == isLoadingActiveQuests) &&
             (identical(other.successMessage, successMessage) ||
                 other.successMessage == successMessage) &&
             (identical(other.errorMessage, errorMessage) ||
@@ -60,16 +66,18 @@ mixin _$QuestsMainState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(recommendedQuests),
+      const DeepCollectionEquality().hash(activeQuests),
       selectedCategory,
       isLoading,
       isRefreshing,
       isSelectingQuest,
+      isLoadingActiveQuests,
       successMessage,
       errorMessage);
 
   @override
   String toString() {
-    return 'QuestsMainState(recommendedQuests: $recommendedQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing, isSelectingQuest: $isSelectingQuest, successMessage: $successMessage, errorMessage: $errorMessage)';
+    return 'QuestsMainState(recommendedQuests: $recommendedQuests, activeQuests: $activeQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing, isSelectingQuest: $isSelectingQuest, isLoadingActiveQuests: $isLoadingActiveQuests, successMessage: $successMessage, errorMessage: $errorMessage)';
   }
 }
 
@@ -81,10 +89,12 @@ abstract mixin class $QuestsMainStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<Quest> recommendedQuests,
+      List<UserQuestInfo> activeQuests,
       QuestCategory? selectedCategory,
       bool isLoading,
       bool isRefreshing,
       bool isSelectingQuest,
+      bool isLoadingActiveQuests,
       String? successMessage,
       String? errorMessage});
 
@@ -105,10 +115,12 @@ class _$QuestsMainStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? recommendedQuests = null,
+    Object? activeQuests = null,
     Object? selectedCategory = freezed,
     Object? isLoading = null,
     Object? isRefreshing = null,
     Object? isSelectingQuest = null,
+    Object? isLoadingActiveQuests = null,
     Object? successMessage = freezed,
     Object? errorMessage = freezed,
   }) {
@@ -117,6 +129,10 @@ class _$QuestsMainStateCopyWithImpl<$Res>
           ? _self.recommendedQuests
           : recommendedQuests // ignore: cast_nullable_to_non_nullable
               as List<Quest>,
+      activeQuests: null == activeQuests
+          ? _self.activeQuests
+          : activeQuests // ignore: cast_nullable_to_non_nullable
+              as List<UserQuestInfo>,
       selectedCategory: freezed == selectedCategory
           ? _self.selectedCategory
           : selectedCategory // ignore: cast_nullable_to_non_nullable
@@ -132,6 +148,10 @@ class _$QuestsMainStateCopyWithImpl<$Res>
       isSelectingQuest: null == isSelectingQuest
           ? _self.isSelectingQuest
           : isSelectingQuest // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isLoadingActiveQuests: null == isLoadingActiveQuests
+          ? _self.isLoadingActiveQuests
+          : isLoadingActiveQuests // ignore: cast_nullable_to_non_nullable
               as bool,
       successMessage: freezed == successMessage
           ? _self.successMessage
@@ -164,13 +184,16 @@ class _$QuestsMainStateCopyWithImpl<$Res>
 class _QuestsMainState extends QuestsMainState {
   _QuestsMainState(
       {final List<Quest> recommendedQuests = const [],
+      final List<UserQuestInfo> activeQuests = const [],
       this.selectedCategory,
       this.isLoading = false,
       this.isRefreshing = false,
       this.isSelectingQuest = false,
+      this.isLoadingActiveQuests = false,
       this.successMessage,
       this.errorMessage})
       : _recommendedQuests = recommendedQuests,
+        _activeQuests = activeQuests,
         super._();
   factory _QuestsMainState.fromJson(Map<String, dynamic> json) =>
       _$QuestsMainStateFromJson(json);
@@ -185,6 +208,15 @@ class _QuestsMainState extends QuestsMainState {
     return EqualUnmodifiableListView(_recommendedQuests);
   }
 
+  final List<UserQuestInfo> _activeQuests;
+  @override
+  @JsonKey()
+  List<UserQuestInfo> get activeQuests {
+    if (_activeQuests is EqualUnmodifiableListView) return _activeQuests;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_activeQuests);
+  }
+
   @override
   final QuestCategory? selectedCategory;
   @override
@@ -196,6 +228,9 @@ class _QuestsMainState extends QuestsMainState {
   @override
   @JsonKey()
   final bool isSelectingQuest;
+  @override
+  @JsonKey()
+  final bool isLoadingActiveQuests;
   @override
   final String? successMessage;
   @override
@@ -223,6 +258,8 @@ class _QuestsMainState extends QuestsMainState {
             other is _QuestsMainState &&
             const DeepCollectionEquality()
                 .equals(other._recommendedQuests, _recommendedQuests) &&
+            const DeepCollectionEquality()
+                .equals(other._activeQuests, _activeQuests) &&
             (identical(other.selectedCategory, selectedCategory) ||
                 other.selectedCategory == selectedCategory) &&
             (identical(other.isLoading, isLoading) ||
@@ -231,6 +268,8 @@ class _QuestsMainState extends QuestsMainState {
                 other.isRefreshing == isRefreshing) &&
             (identical(other.isSelectingQuest, isSelectingQuest) ||
                 other.isSelectingQuest == isSelectingQuest) &&
+            (identical(other.isLoadingActiveQuests, isLoadingActiveQuests) ||
+                other.isLoadingActiveQuests == isLoadingActiveQuests) &&
             (identical(other.successMessage, successMessage) ||
                 other.successMessage == successMessage) &&
             (identical(other.errorMessage, errorMessage) ||
@@ -242,16 +281,18 @@ class _QuestsMainState extends QuestsMainState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_recommendedQuests),
+      const DeepCollectionEquality().hash(_activeQuests),
       selectedCategory,
       isLoading,
       isRefreshing,
       isSelectingQuest,
+      isLoadingActiveQuests,
       successMessage,
       errorMessage);
 
   @override
   String toString() {
-    return 'QuestsMainState(recommendedQuests: $recommendedQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing, isSelectingQuest: $isSelectingQuest, successMessage: $successMessage, errorMessage: $errorMessage)';
+    return 'QuestsMainState(recommendedQuests: $recommendedQuests, activeQuests: $activeQuests, selectedCategory: $selectedCategory, isLoading: $isLoading, isRefreshing: $isRefreshing, isSelectingQuest: $isSelectingQuest, isLoadingActiveQuests: $isLoadingActiveQuests, successMessage: $successMessage, errorMessage: $errorMessage)';
   }
 }
 
@@ -265,10 +306,12 @@ abstract mixin class _$QuestsMainStateCopyWith<$Res>
   @useResult
   $Res call(
       {List<Quest> recommendedQuests,
+      List<UserQuestInfo> activeQuests,
       QuestCategory? selectedCategory,
       bool isLoading,
       bool isRefreshing,
       bool isSelectingQuest,
+      bool isLoadingActiveQuests,
       String? successMessage,
       String? errorMessage});
 
@@ -290,10 +333,12 @@ class __$QuestsMainStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? recommendedQuests = null,
+    Object? activeQuests = null,
     Object? selectedCategory = freezed,
     Object? isLoading = null,
     Object? isRefreshing = null,
     Object? isSelectingQuest = null,
+    Object? isLoadingActiveQuests = null,
     Object? successMessage = freezed,
     Object? errorMessage = freezed,
   }) {
@@ -302,6 +347,10 @@ class __$QuestsMainStateCopyWithImpl<$Res>
           ? _self._recommendedQuests
           : recommendedQuests // ignore: cast_nullable_to_non_nullable
               as List<Quest>,
+      activeQuests: null == activeQuests
+          ? _self._activeQuests
+          : activeQuests // ignore: cast_nullable_to_non_nullable
+              as List<UserQuestInfo>,
       selectedCategory: freezed == selectedCategory
           ? _self.selectedCategory
           : selectedCategory // ignore: cast_nullable_to_non_nullable
@@ -317,6 +366,10 @@ class __$QuestsMainStateCopyWithImpl<$Res>
       isSelectingQuest: null == isSelectingQuest
           ? _self.isSelectingQuest
           : isSelectingQuest // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isLoadingActiveQuests: null == isLoadingActiveQuests
+          ? _self.isLoadingActiveQuests
+          : isLoadingActiveQuests // ignore: cast_nullable_to_non_nullable
               as bool,
       successMessage: freezed == successMessage
           ? _self.successMessage
