@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../../models/user/user_quest/user_quest.dart';
+import '../../../../utils/quest_time_calculator.dart';
 
 Widget activeQuestCard(UserQuestInfo userQuest, Function(UserQuestInfo) onTap) {
+  final timeInfo = QuestTimeCalculator.calculateQuestTime(userQuest);
+  final timeColor = _getTimeStatusColor(timeInfo.timeStatusColor);
+  
   return Card(
     margin: const EdgeInsets.symmetric(vertical: 4),
     child: InkWell(
@@ -71,11 +75,44 @@ Widget activeQuestCard(UserQuestInfo userQuest, Function(UserQuestInfo) onTap) {
                   const Spacer(),
                 ],
                 
-                // Duration information
+                // Duration and time information
                 Icon(
-                  Icons.schedule,
+                  timeInfo.isExpired ? Icons.warning : Icons.schedule,
                   size: 16,
-                  color: Colors.blue.shade700,
+                  color: timeColor,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  timeInfo.shortRemainingTime,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: timeColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            
+            // Time progress bar
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: LinearProgressIndicator(
+                    value: timeInfo.progressPercentage.clamp(0.0, 1.0),
+                    backgroundColor: Colors.grey.shade300,
+                    valueColor: AlwaysStoppedAnimation<Color>(timeColor),
+                    minHeight: 4,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${(timeInfo.progressPercentage * 100).toInt()}%',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: timeColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -161,4 +198,17 @@ Widget _buildStatusChip(String status) {
       ),
     ),
   );
+}
+
+Color _getTimeStatusColor(TimeStatusColor timeStatusColor) {
+  switch (timeStatusColor) {
+    case TimeStatusColor.normal:
+      return Colors.green;
+    case TimeStatusColor.warning:
+      return Colors.orange;
+    case TimeStatusColor.urgent:
+      return Colors.red.shade600;
+    case TimeStatusColor.expired:
+      return Colors.red.shade800;
+  }
 }

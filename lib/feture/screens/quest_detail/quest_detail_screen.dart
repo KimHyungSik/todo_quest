@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_quest/feture/screens/quest_detail/quest_detail_viewmodel.dart';
+import 'package:todo_quest/utils/quest_time_calculator.dart';
 import '../../../models/user/user_quest/user_quest.dart';
 
 class QuestDetailScreen extends ConsumerWidget {
@@ -59,6 +60,10 @@ class QuestDetailScreen extends ConsumerWidget {
 
                         // Quest details card
                         _buildQuestDetailsCard(context, questDetailState.currentQuest!),
+                        const SizedBox(height: 16),
+
+                        // Quest time information
+                        _buildQuestTimeCard(context, questDetailState.currentQuest!),
                         const SizedBox(height: 16),
 
                         // Quest actions
@@ -566,6 +571,177 @@ class QuestDetailScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Widget _buildQuestTimeCard(BuildContext context, UserQuestInfo quest) {
+    final timeInfo = QuestTimeCalculator.calculateQuestTime(quest);
+    final timeColor = _getTimeStatusColor(timeInfo.timeStatusColor);
+    
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '시간 정보',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            
+            // Time progress bar
+            _buildTimeProgressBar(context, timeInfo, timeColor),
+            const SizedBox(height: 16),
+            
+            // Time details grid
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildTimeInfoItem(
+                        context,
+                        '시작 시간',
+                        _formatDate(timeInfo.startTime),
+                        Icons.play_arrow,
+                        Colors.green,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _buildTimeInfoItem(
+                        context,
+                        '종료 시간',
+                        _formatDate(timeInfo.endTime),
+                        Icons.flag,
+                        Colors.blue,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildTimeInfoItem(
+                        context,
+                        '경과 시간',
+                        timeInfo.formattedElapsedTime.replaceFirst('진행 시간: ', ''),
+                        Icons.hourglass_bottom,
+                        Colors.orange,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: _buildTimeInfoItem(
+                        context,
+                        timeInfo.isExpired ? '초과 시간' : '남은 시간',
+                        timeInfo.shortRemainingTime,
+                        timeInfo.isExpired ? Icons.warning : Icons.access_time,
+                        timeColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildTimeProgressBar(BuildContext context, QuestTimeInfo timeInfo, Color timeColor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '진행률',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              '${(timeInfo.progressPercentage * 100).toInt()}%',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: timeColor,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        LinearProgressIndicator(
+          value: timeInfo.progressPercentage.clamp(0.0, 1.0),
+          backgroundColor: Colors.grey.shade300,
+          valueColor: AlwaysStoppedAnimation<Color>(timeColor),
+          minHeight: 8,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          timeInfo.formattedRemainingTime,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: timeColor,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildTimeInfoItem(BuildContext context, String label, String value, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 16),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Color _getTimeStatusColor(TimeStatusColor timeStatusColor) {
+    switch (timeStatusColor) {
+      case TimeStatusColor.normal:
+        return Colors.green;
+      case TimeStatusColor.warning:
+        return Colors.orange;
+      case TimeStatusColor.urgent:
+        return Colors.red.shade600;
+      case TimeStatusColor.expired:
+        return Colors.red.shade800;
+    }
   }
 
   String _formatDate(DateTime date) {

@@ -5,6 +5,7 @@ import 'package:todo_quest/key/api_key.dart';
 import 'package:todo_quest/repositories/auth_repository/auth_repository.dart';
 import 'package:todo_quest/screens/login_screen.dart';
 import 'package:todo_quest/feture/screens/main_navigation/main_navigation_screen.dart';
+import 'package:todo_quest/services/quest_timer_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,16 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
+    
+    // Initialize quest timer service when user is logged in
+    ref.listen(authStateProvider, (previous, next) {
+      next.whenData((user) {
+        if (user != null) {
+          // Initialize quest timer service
+          ref.read(questTimerServiceProvider);
+        }
+      });
+    });
 
     return MaterialApp(
       theme: ThemeData(

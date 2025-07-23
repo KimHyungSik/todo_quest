@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_quest/feture/screens/quests_ongoing/state/ongoing_quests_state.dart';
 import 'package:todo_quest/repositories/user_repository/user_quest_repository.dart';
 import 'package:todo_quest/feture/screens/quest_detail/quest_detail_screen.dart';
+import 'package:todo_quest/services/quest_timer_service.dart';
 import '../../../models/user/user_quest/user_quest.dart';
 
 class OngoingQuestsViewModel extends StateNotifier<OngoingQuestsState> {
@@ -48,6 +49,20 @@ class OngoingQuestsViewModel extends StateNotifier<OngoingQuestsState> {
       activeQuests: activeQuests,
       isLoading: false,
     );
+  }
+  
+  // 만료된 퀘스트 확인 및 처리
+  Future<void> checkExpiredQuests() async {
+    try {
+      // Get all active quests and check for expired ones
+      final activeQuests = await _loadActiveQuests();
+      
+      // This could trigger the timer service to process expired quests
+      // For now, we'll just refresh the list
+      await refreshQuests();
+    } catch (e) {
+      print('만료 퀘스트 확인 중 오류 발생: $e');
+    }
   }
 
   // 활성 퀘스트 클릭 처리
