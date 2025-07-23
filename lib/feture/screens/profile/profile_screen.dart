@@ -116,16 +116,6 @@ class ProfileScreen extends ConsumerWidget {
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
-                  if (userInfo?.createdAt != null) ...[
-                    const SizedBox(height: 8),
-                    Text(
-                      '가입일: ${userInfo!.timeSinceCreated}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                    ),
-                  ],
                 ],
               ),
             ),
