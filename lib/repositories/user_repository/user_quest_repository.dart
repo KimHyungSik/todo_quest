@@ -73,6 +73,11 @@ class UserQuestRepository {
     return getUserQuests(userId: userId, status: 'completed');
   }
 
+  /// 실패한 퀘스트만 가져오기
+  Future<List<UserQuestInfo>> getFailedQuests([String? userId]) async {
+    return getUserQuests(userId: userId, status: 'failed');
+  }
+
   /// 취소된 퀘스트만 가져오기
   Future<List<UserQuestInfo>> getCancelledQuests([String? userId]) async {
     return getUserQuests(userId: userId, status: 'cancelled');
@@ -151,6 +156,46 @@ class UserQuestRepository {
       };
     } catch (e) {
       print('퀘스트 완료 중 오류 발생: $e');
+      rethrow;
+    }
+  }
+
+  /// 퀘스트 실패
+  Future<Map<String, dynamic>> failedQuest({
+    required String userQuestId,
+    String? userId,
+  }) async {
+    try {
+      final currentUser = supabase.auth.currentUser;
+      if (currentUser == null && userId == null) {
+        throw Exception('로그인이 필요합니다.');
+      }
+
+      final targetUserId = userId ?? currentUser!.id;
+
+      final response = await supabase.rpc('failed_quest', params: {
+        'p_user_id': targetUserId,
+        'p_user_quest_id': userQuestId,
+      });
+
+      if (response == null) {
+        throw Exception('서버 응답이 없습니다.');
+      }
+
+      final result = response as Map<String, dynamic>;
+
+      if (result['success'] != true) {
+        throw Exception(result['message'] ?? '퀘스트 실패 처리 오류');
+      }
+
+      // 실패 정보 반환
+      return {
+        'questTitle': result['data']?['quest_title'],
+        'penaltyExp': result['data']?['penalty_exp'] ?? 0,
+        'hasConsequence': result['data']?['has_consequence'] ?? false,
+      };
+    } catch (e) {
+      print('퀘스트 실패 처리 중 오류 발생: $e');
       rethrow;
     }
   }
