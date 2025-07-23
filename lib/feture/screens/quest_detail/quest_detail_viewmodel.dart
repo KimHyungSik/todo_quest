@@ -80,27 +80,25 @@ class QuestDetailViewModel extends StateNotifier<QuestDetailState> {
   // 퀘스트 완료
   Future<void> completeQuest() async {
     if (state.currentQuest == null) return;
-    
+
     state = state.copyWith(
       isUpdatingStatus: true,
       successMessage: null,
       errorMessage: null,
     );
-    
+
     try {
-      // TODO: Implement quest completion API call
-      // For now, simulate completion
-      await Future.delayed(const Duration(seconds: 1));
-      
+      await _userQuestRepository.completeQuest(userQuestId: _userQuestId);
+
       state = state.copyWith(
         isUpdatingStatus: false,
         successMessage: '퀘스트가 완료되었습니다!',
       );
-      
+
       // Reload quest details and history
       await _loadQuestDetails();
       await _loadCompletionHistory();
-      
+
       // Auto-remove success message
       Future.delayed(const Duration(seconds: 3), () {
         if (mounted) {
@@ -112,7 +110,7 @@ class QuestDetailViewModel extends StateNotifier<QuestDetailState> {
         isUpdatingStatus: false,
         errorMessage: '퀘스트 완료 중 오류가 발생했습니다: $error',
       );
-      
+
       // Auto-remove error message
       Future.delayed(const Duration(seconds: 5), () {
         if (mounted) {
@@ -133,9 +131,7 @@ class QuestDetailViewModel extends StateNotifier<QuestDetailState> {
     );
     
     try {
-      // TODO: Implement quest abandon API call
-      // For now, simulate abandonment
-      await Future.delayed(const Duration(seconds: 1));
+      await _userQuestRepository.failedQuest(userQuestId: _userQuestId);;
       
       state = state.copyWith(
         isUpdatingStatus: false,
