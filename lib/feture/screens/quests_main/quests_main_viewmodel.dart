@@ -1,8 +1,10 @@
 // QuestsMainViewModel
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_quest/feture/screens/quests_main/state/quests_main_state.dart';
 import 'package:todo_quest/repositories/user_repository/user_quest_repository.dart';
+import 'package:todo_quest/feture/screens/quest_detail/quest_detail_screen.dart';
 
 import '../../../models/quest/quest.dart';
 import '../../../models/quest/category/quest_category.dart';
@@ -126,9 +128,18 @@ class QuestsMainViewModel extends StateNotifier<QuestsMainState> {
   }
 
   // 활성 퀘스트 클릭 처리
-  void onClickActiveQuest(UserQuestInfo userQuest) {
+  void onClickActiveQuest(UserQuestInfo userQuest, BuildContext context) {
     print("활성 퀘스트 클릭: ${userQuest.questTitle}");
-    // TODO: 퀘스트 상세 화면으로 이동 또는 퀘스트 관리 기능 추가
+    
+    // 퀘스트 상세 화면으로 이동
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuestDetailScreen(
+          userQuestId: userQuest.userQuestId,
+          questTitle: userQuest.questTitle,
+        ),
+      ),
+    );
   }
 }
 

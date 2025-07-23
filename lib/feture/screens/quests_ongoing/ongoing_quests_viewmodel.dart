@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_quest/feture/screens/quests_ongoing/state/ongoing_quests_state.dart';
 import 'package:todo_quest/repositories/user_repository/user_quest_repository.dart';
+import 'package:todo_quest/feture/screens/quest_detail/quest_detail_screen.dart';
 import '../../../models/user/user_quest/user_quest.dart';
 
 class OngoingQuestsViewModel extends StateNotifier<OngoingQuestsState> {
@@ -49,21 +51,18 @@ class OngoingQuestsViewModel extends StateNotifier<OngoingQuestsState> {
   }
 
   // 활성 퀘스트 클릭 처리
-  void onClickActiveQuest(UserQuestInfo userQuest) {
+  void onClickActiveQuest(UserQuestInfo userQuest, BuildContext context) {
     print("활성 퀘스트 클릭: ${userQuest.questTitle}");
-    // TODO: 퀘스트 상세 화면으로 이동 또는 퀘스트 관리 기능 추가
     
-    // 임시 성공 메시지 표시
-    state = state.copyWith(
-      successMessage: '퀘스트 "${userQuest.questTitle}"을 선택했습니다',
+    // 퀘스트 상세 화면으로 이동
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuestDetailScreen(
+          userQuestId: userQuest.userQuestId,
+          questTitle: userQuest.questTitle,
+        ),
+      ),
     );
-    
-    // 3초 후 메시지 제거
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        state = state.copyWith(successMessage: null);
-      }
-    });
   }
 
   // 에러 메시지 제거

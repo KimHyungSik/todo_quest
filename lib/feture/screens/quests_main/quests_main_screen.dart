@@ -174,7 +174,7 @@ class QuestsMainScreen extends ConsumerWidget {
                             ),
                             child: activeQuestCard(
                               activeQuest,
-                              viewModel.onClickActiveQuest,
+                              (userQuest) => viewModel.onClickActiveQuest(userQuest, context),
                             ),
                           );
                         },

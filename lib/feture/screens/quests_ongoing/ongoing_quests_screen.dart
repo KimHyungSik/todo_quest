@@ -87,12 +87,6 @@ class OngoingQuestsScreen extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (ongoingQuestsState.isLoading)
-                    const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -111,7 +105,7 @@ class OngoingQuestsScreen extends ConsumerWidget {
                                 margin: const EdgeInsets.only(bottom: 12),
                                 child: activeQuestCard(
                                   activeQuest,
-                                  viewModel.onClickActiveQuest,
+                                  (userQuest) => viewModel.onClickActiveQuest(userQuest, context),
                                 ),
                               );
                             },

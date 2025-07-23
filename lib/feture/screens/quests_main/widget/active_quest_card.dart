@@ -77,15 +77,6 @@ Widget activeQuestCard(UserQuestInfo userQuest, Function(UserQuestInfo) onTap) {
                   size: 16,
                   color: Colors.blue.shade700,
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  '${userQuest.durationDays}일 퀘스트',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.blue.shade700,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
               ],
             ),
             
